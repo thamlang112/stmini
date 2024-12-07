@@ -5,102 +5,87 @@
   box-sizing: border-box;
 }
 
+/* Thiết lập nền và kiểu chữ chung */
 body {
   display: flex;
   font-family: "Arial", sans-serif;
+  background-color: #f4f4f4; /* Màu nền nhẹ nhàng */
 }
 
+/* Thanh điều hướng bên trái */
 .sidebar {
-  width: 250px; /* Chiều rộng của thanh điều hướng */
-  background-color: #007bff;
+  width: 250px; /* Chiều rộng của sidebar */
+  background-color: #007bff; /* Màu xanh chính */
   color: white;
   padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Đổ bóng cho sidebar */
 }
 
 .sidebar h1 {
-  text-align: center;
-  margin-bottom: 20px;
+  text-align: center; /* Căn giữa tiêu đề */
+  margin-bottom: 20px; /* Khoảng cách dưới tiêu đề */
+  font-size: 24px; /* Kích thước tiêu đề */
 }
 
 .sidebar ul {
-  list-style: none;
+  list-style: none; /* Bỏ dấu đầu dòng */
+  padding-left: 0; /* Bỏ padding bên trái */
 }
 
 .sidebar li {
-  margin: 15px 0;
+  margin: 15px 0; /* Khoảng cách giữa các mục */
 }
 
 .sidebar a {
-  color: white;
-  text-decoration: none;
-  font-size: 18px;
+  color: white; /* Màu chữ */
+  text-decoration: none; /* Bỏ gạch chân */
+  font-size: 18px; /* Kích thước chữ */
+  transition: color 0.3s; /* Hiệu ứng chuyển màu */
 }
 
 .sidebar a:hover {
-  text-decoration: underline;
+  color: #ffdd57; /* Màu khi hover */
 }
 
-.content {
-  flex-grow: 1;
+/* Nội dung chính */
+.container {
+  flex-grow: 1; /* Tự động chiếm không gian còn lại */
   padding: 20px;
+  background-color: white; /* Nền trắng cho nội dung */
+  border-left: 1px solid #ccc; /* Đường viền bên trái */
 }
 
 h1 {
-  margin-bottom: 20px;
-  color: #333;
+  margin-bottom: 20px; /* Khoảng cách dưới tiêu đề chính */
+  color: #333; /* Màu chữ tiêu đề chính */
+  font-size: 28px; /* Kích thước chữ tiêu đề */
+  text-align: center; /* Căn giữa tiêu đề */
 }
 
-.form {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px; /* Khoảng cách giữa các ô */
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-label {
-  margin-bottom: 5px;
-  color: #555;
-}
-
-input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-button {
-  grid-column: span 2; /* Nút chiếm toàn bộ chiều rộng */
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
-
+/* Bảng hiển thị sản phẩm */
 table {
-  width: 100%;
-  margin-top: 20px;
-  border-collapse: collapse;
+  width: 100%; /* Chiếm toàn bộ chiều rộng */
+  margin-top: 20px; /* Khoảng cách trên bảng */
+  border-collapse: collapse; /* Xóa khoảng cách giữa các ô */
 }
 
 th,
 td {
-  padding: 10px;
-  border: 1px solid #ccc;
-  text-align: center;
+  padding: 10px; /* Khoảng cách trong ô */
+  border: 1px solid #ccc; /* Đường viền cho ô */
+  text-align: center; /* Căn giữa chữ trong ô */
 }
 
 th {
-  background-color: #007bff;
-  color: white;
+  background-color: #007bff; /* Màu nền tiêu đề bảng */
+  color: white; /* Màu chữ tiêu đề */
+  font-weight: bold; /* Chữ đậm cho tiêu đề bảng */
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2; /* Nền bảng xen kẽ cho hàng chẵn */
+}
+
+tr:hover {
+  background-color: #ebebeb; /* Đổi màu hàng khi hover */
 }

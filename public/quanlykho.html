@@ -14,7 +14,175 @@
   <body>
     <div class="sidebar">
       <h1>Quản Lý Kho Hàng</h1>
+      <ul><!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Hàng Hóa</title>
+    <link rel="stylesheet" href="kho.css" />
+    <script>
+      function navigateTo(page) {
+        window.location.href = page + ".html";
+      }
+    </script>
+  </head>
+  <body>
+    <div class="sidebar">
+      <h1>Quản Lý Kho Hàng</h1>
       <ul>
+        <li>
+          <a href="kho/nhacungcap.html" onclick="navigateTo('nhacungcap')"
+            >Nhà Cung Cấp</a
+          >
+        </li>
+        <li>
+          <a href="kho/qlhanghoa.html" onclick="navigateTo('quanlyhanghoa')"
+            >Quản Lý Hàng hóa</a
+          >
+        </li>
+        <li>
+          <a href="kho/nhaphang.html" onclick="navigateTo('nhaphang')"
+            >Phiếu Nhập Hàng</a
+          >
+        </li>
+        <li>
+          <a href="kho/xuathang.html" onclick="navigateTo('xuathang')"
+            >Xuất Hàng</a
+          >
+        </li>
+        <li>
+          <a href="kho/trogiup.html" onclick="navigateTo('trogiup')"
+            >Trợ Giúp</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="container">
+      <h1>HÀNG HÓA</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã HH</th>
+            <th>Xuất Xứ</th>
+            <th>ĐVT</th>
+            <th>Tên HH</th>
+            <th>Giá Nhập</th>
+            <th>Nhà CC</th>
+            <th>Số Lượng</th>
+            <th>NH</th>
+            <th>Giá Bán</th>
+            <th>Mã Vạch</th>
+            <th>Trạng Thái</th>
+            <th>Thuế VAT</th>
+          </tr>
+        </thead>
+        <tbody id="productTableBody">
+          <!-- Dữ liệu hàng hóa sẽ được hiển thị ở đây -->
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      function loadProducts() {
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+        const tbody = document.getElementById("productTableBody");
+        tbody.innerHTML = ""; // Xóa nội dung cũ
+
+        // Khởi tạo dữ liệu mẫu nếu chưa có sản phẩm
+        if (products.length === 0) {
+          const defaultProducts = [
+            {
+              maHH: "HH001",
+              xuatxu: "Việt Nam",
+              dvt: "Cái",
+              tenHH: "Sữa",
+              giaNhap: 8000,
+              nhaCC: "Vinamill",
+              soLuong: 100,
+              nh: "NH1",
+              giaBan: 12000,
+              maVach: "1234567890123",
+              trangThai: "Còn hàng",
+              thueVAT: "10%",
+            },
+            {
+              maHH: "HH002",
+              xuatxu: "Hàn Quốc",
+              dvt: "Hộp",
+              tenHH: "Cafe",
+              giaNhap: 15000,
+              nhaCC: "Minh Chiến",
+              soLuong: 50,
+              nh: "NH2",
+              giaBan: 25000,
+              maVach: "1234567890124",
+              trangThai: "Còn hàng",
+              thueVAT: "10%",
+            },
+            {
+              maHH: "HH003",
+              xuatxu: "Trung Quốc",
+              dvt: "Cái",
+              tenHH: "Kẹo Mút",
+              giaNhap: 5000,
+              nhaCC: "Chuppa Chups",
+              soLuong: 200,
+              nh: "NH3",
+              giaBan: 8000,
+              maVach: "1234567890125",
+              trangThai: "Còn hàng",
+              thueVAT: "10%",
+            },
+            {
+              maHH: "HH004",
+              xuatxu: "Nhật Bản",
+              dvt: "Gói",
+              tenHH: "Mì tôm",
+              giaNhap: 20000,
+              nhaCC: "Omachi",
+              soLuong: 30,
+              nh: "NH4",
+              giaBan: 35000,
+              maVach: "1234567890126",
+              trangThai: "Còn hàng",
+              thueVAT: "10%",
+            },
+          ];
+          localStorage.setItem("products", JSON.stringify(defaultProducts));
+          products = defaultProducts; // Cập nhật lại danh sách sản phẩm
+        }
+
+        products.forEach((product, index) => {
+          const newRow = document.createElement("tr");
+          newRow.innerHTML = `
+                  <td>${index + 1}</td>
+                  <td>${product.maHH}</td>
+                  <td>${product.xuatxu}</td>
+                  <td>${product.dvt}</td>
+                  <td>${product.tenHH}</td>
+                  <td>${product.giaNhap}</td>
+                  <td>${product.nhaCC}</td>
+                  <td>${product.soLuong}</td>
+                  <td>${product.nh}</td>
+                  <td>${product.giaBan}</td>
+                  <td>${product.maVach}</td>
+                  <td>${product.trangThai}</td>
+                  <td>${product.thueVAT}</td>
+              `;
+          tbody.appendChild(newRow);
+        });
+      }
+
+      // Gọi hàm loadProducts khi trang được tải
+      window.onload = function () {
+        loadProducts();
+      };
+    </script>
+  </body>
+</html>
+
         <li>
           <a href="kho/nhacungcap.html" onclick="navigateTo('nhacungcap')"
             >Nhà Cung Cấp</a

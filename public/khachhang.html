@@ -3,40 +3,345 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản Lý Khách Hàng</title>
-    <link rel="stylesheet" href="khachhang.css" />
-    <script src="khachhang.js" defer></script>
+    <title>Danh Sách Khách Hàng</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+      }
+      .sidebar {
+        width: 250px;
+        padding: 20px;
+        color: white;
+        border-radius: 8px;
+      }
+      .sidebar h2,
+      .sidebar h3 {
+        margin: 0 0 10px;
+        padding: 10px;
+        background-color: #00bfff;
+        border-radius: 4px;
+      }
+      .sidebar .add-group {
+        background-color: white;
+        border: none;
+        color: #00bfff;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .sidebar .dropdown,
+      .sidebar input {
+        margin-bottom: 15px;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        width: 100%;
+        background: white;
+        color: #333;
+      }
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        display: block;
+        padding: 10px;
+        border-radius: 4px;
+        margin: 5px 0;
+      }
+      .sidebar a:hover {
+        background: #0080ff;
+      }
+      .total-sales {
+        margin-top: 20px;
+        padding: 10px;
+        border-radius: 4px;
+        background: rgba(255, 255, 255, 0.8);
+      }
+      .total-sales label {
+        display: block;
+        margin-top: 10px;
+        color: #333;
+      }
+      .total-sales input[type="radio"] {
+        margin-right: 5px;
+        accent-color: green;
+      }
+      .total-sales .other-option {
+        margin-top: 10px;
+        color: #00bfff;
+      }
+      .total-sales .other-option:hover {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+      .main-content {
+        flex-grow: 1;
+        margin-left: 20px;
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .btn-group {
+        text-align: right;
+        margin-bottom: 20px;
+      }
+      .btn-group button {
+        padding: 10px 15px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-left: 10px;
+      }
+      .btn-group button:hover {
+        background-color: #218838;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      .highlight {
+        background-color: #d9edf7;
+      }
+      .editable {
+        background-color: #e6fffa;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <h1>Quản Lý Khách Hàng</h1>
-      <div class="input-section">
-        <input type="text" id="maKH" placeholder="Mã Khách Hàng" />
-        <input type="text" id="tenKH" placeholder="Tên Khách Hàng" />
-        <input type="text" id="sdt" placeholder="SĐT" />
-        <input type="text" id="diaChi" placeholder="Địa Chỉ" />
-        <input type="date" id="ngayTao" placeholder="Ngày Tạo" />
-        <button id="themKH">Thêm Khách Hàng</button>
+      <div class="sidebar">
+        <h2>
+          Nhóm Khách Hàng
+          <button class="add-group" onclick="addGroup()">+</button>
+        </h2>
+        <select class="dropdown" id="groupDropdown">
+          <option>Tất cả các nhóm</option>
+          <option>Nhóm 1</option>
+          <option>Nhóm 2</option>
+          <option>Nhóm 3</option>
+        </select>
+        <div class="search-section">
+          <h3>Tìm Kiếm</h3>
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Theo mã, tên, điện thoại"
+          />
+        </div>
+        <div class="total-sales">
+          <h3>Tổng Bán</h3>
+          <label>Từ: <input type="text" placeholder="Giá trị" /></label>
+          <label>Tới: <input type="text" placeholder="Giá trị" /></label>
+          <label
+            >Nợ cần thu hiện tại: <input type="text" placeholder="Giá trị"
+          /></label>
+          <label>
+            <input
+              type="radio"
+              name="timeframe"
+              value="toan-thoi-gian"
+              checked
+            />
+            Toàn thời gian
+          </label>
+          <label>
+            <input type="radio" name="timeframe" value="thang-nay" /> Tháng này
+          </label>
+          <label>
+            <input type="radio" name="timeframe" value="nam-nay" /> Năm nay
+          </label>
+          <div class="other-option">Lựa chọn khác ▼</div>
+        </div>
       </div>
-      <table>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Mã KH</th>
-            <th>Tên KH</th>
-            <th>Địa Chỉ</th>
-            <th>SĐT</th>
-            <th>Hành Động</th>
-            <th>Ngày Tạo</th>
-          </tr>
-        </thead>
-        <tbody id="customerTableBody">
-          <!-- Dữ liệu khách hàng sẽ được hiển thị ở đây -->
-        </tbody>
-      </table>
-      <div class="buttons">
-        <button id="lamMoi">Làm Mới</button>
+      <div class="main-content">
+        <h1>Danh Sách Khách Hàng</h1>
+        <div class="btn-group">
+          <button onclick="location.href='khachhang1.html'">Khách Hàng</button>
+          <button id="editButton">Sửa</button>
+          <button id="exportButton">Xuất File</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Mã khách hàng</th>
+              <th>Tên khách hàng</th>
+              <th>Điện thoại</th>
+              <th>Tổng bán</th>
+              <th>Nợ cần thu hiện tại</th>
+              <th>Ngày tạo</th>
+            </tr>
+          </thead>
+          <tbody id="customerTableBody">
+            <tr>
+              <td contenteditable="false">KH0001</td>
+              <td contenteditable="false">Nguyễn Văn Hiển</td>
+              <td contenteditable="false">09791239078</td>
+              <td contenteditable="false">21.238.000</td>
+              <td contenteditable="false">5.000.000</td>
+              <td contenteditable="false">01/01/2023</td>
+            </tr>
+            <tr>
+              <td contenteditable="false">KH0002</td>
+              <td contenteditable="false">Anh Giang - Kim Hà</td>
+              <td contenteditable="false">01236745309</td>
+              <td contenteditable="false">2.950.000</td>
+              <td contenteditable="false">1.000.000</td>
+              <td contenteditable="false">02/01/2023</td>
+            </tr>
+            <tr>
+              <td contenteditable="false">KH0003</td>
+              <td contenteditable="false">Anh Hùng - Sài Gòn</td>
+              <td contenteditable="false">09781234567</td>
+              <td contenteditable="false">0</td>
+              <td contenteditable="false">0</td>
+              <td contenteditable="false">03/01/2023</td>
+            </tr>
+            <tr class="highlight">
+              <td contenteditable="false">KH0004</td>
+              <td contenteditable="false">Phạm Thu Hương</td>
+              <td contenteditable="false">09327625363</td>
+              <td contenteditable="false">5.645.000</td>
+              <td contenteditable="false">3.500.000</td>
+              <td contenteditable="false">04/01/2023</td>
+            </tr>
+            <tr>
+              <td contenteditable="false">KH0005</td>
+              <td contenteditable="false">Nguyễn Văn Hải</td>
+              <td contenteditable="false">01998754321</td>
+              <td contenteditable="false">5.624.000</td>
+              <td contenteditable="false">2.000.000</td>
+              <td contenteditable="false">05/01/2023</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+
+    <script>
+      // Thêm nhóm khách hàng mới
+      function addGroup() {
+        const groupName = prompt("Nhập tên nhóm khách hàng mới:");
+        if (groupName) {
+          const dropdown = document.getElementById("groupDropdown");
+          const newOption = document.createElement("option");
+          newOption.textContent = groupName;
+          dropdown.appendChild(newOption);
+          alert("Đã thêm nhóm khách hàng: " + groupName);
+        }
+      }
+
+      // Xuất file Excel
+      document
+        .getElementById("exportButton")
+        .addEventListener("click", function () {
+          const confirmation = confirm(
+            "Bạn có muốn tải về file Excel danh sách khách hàng không?"
+          );
+          if (confirmation) {
+            const ws = XLSX.utils.table_to_sheet(
+              document.getElementById("customerTableBody").parentNode
+            );
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Khách Hàng");
+            XLSX.writeFile(wb, "danh_sach_khach_hang.xlsx");
+          }
+        });
+
+      // Tìm kiếm khách hàng
+      const searchInput = document.getElementById("searchInput");
+      const customerTableBody = document.getElementById("customerTableBody");
+      const rows = customerTableBody.getElementsByTagName("tr");
+
+      searchInput.addEventListener("input", function () {
+        const filter = searchInput.value.toLowerCase();
+        for (let i = 0; i < rows.length; i++) {
+          const cells = rows[i].getElementsByTagName("td");
+          let found = false;
+          for (let j = 0; j < cells.length; j++) {
+            if (cells[j].textContent.toLowerCase().includes(filter)) {
+              found = true;
+              break;
+            }
+          }
+          rows[i].style.display = found ? "" : "none";
+        }
+      });
+
+      // Chỉnh sửa bảng
+      const editButton = document.getElementById("editButton");
+      let isEditing = false;
+
+      editButton.addEventListener("click", function () {
+        isEditing = !isEditing;
+        const cells = customerTableBody.getElementsByTagName("td");
+        for (let i = 0; i < cells.length; i++) {
+          cells[i].contentEditable = isEditing;
+          cells[i].classList.toggle("editable", isEditing);
+        }
+        editButton.textContent = isEditing ? "Lưu" : "Nhập";
+        if (!isEditing) {
+          alert("Dữ liệu đã được lưu!");
+        }
+      });
+
+      // Lấy danh sách khách hàng từ localStorage và hiển thị
+      document.addEventListener("DOMContentLoaded", function () {
+        const customerTableBody = document.getElementById("customerTableBody");
+        const customers = JSON.parse(localStorage.getItem("customers")) || [];
+
+        // Loại bỏ trùng lặp
+        const uniqueCustomers = Array.from(
+          new Map(
+            customers.map((customer) => [
+              customer.maKH + customer.tenKH.toLowerCase(),
+              customer,
+            ])
+          ).values()
+        );
+
+        uniqueCustomers.forEach((customer) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+                    <td>${customer.maKH}</td>
+                    <td>${customer.tenKH}</td>
+                    <td>${customer.sdt}</td>
+                    <td>${customer.tongBan || "0"}</td>
+                    <td>${customer.noCanThu || "0"}</td>
+                    <td>${customer.ngayTao}</td>
+                `;
+          customerTableBody.appendChild(row);
+        });
+      });
+    </script>
   </body>
 </html>

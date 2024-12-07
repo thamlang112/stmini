@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm Khách Hàng</title>
+    <link rel="stylesheet" href="khachhang.css" />
+    <script src="khachhang.js" defer></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+        color: #333;
+      }
+      .input-section {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 20px;
+      }
+      .input-section input {
+        margin-bottom: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      .input-section button {
+        padding: 10px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .input-section button:hover {
+        background-color: #218838;
+      }
+      .buttons {
+        text-align: center;
+      }
+      .buttons button {
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .buttons button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Thêm Khách Hàng</h1>
+      <div class="input-section">
+        <input type="text" id="maKH" placeholder="Mã Khách Hàng" />
+        <input type="text" id="tenKH" placeholder="Tên Khách Hàng" />
+        <input type="text" id="sdt" placeholder="SĐT" />
+        <input type="text" id="diaChi" placeholder="Địa Chỉ" />
+        <input type="date" id="ngayTao" placeholder="Ngày Tạo" />
+        <button id="themKH">Thêm Khách Hàng</button>
+      </div>
+      <div class="buttons">
+        <button onclick="location.href='khachhang.html'">Quay Lại</button>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("themKH").addEventListener("click", function () {
+        const maKH = document.getElementById("maKH").value;
+        const tenKH = document.getElementById("tenKH").value;
+        const sdt = document.getElementById("sdt").value;
+        const diaChi = document.getElementById("diaChi").value;
+        const ngayTao = document.getElementById("ngayTao").value;
+
+        if (maKH && tenKH && sdt && diaChi && ngayTao) {
+          // Lưu thông tin vào localStorage
+          const newCustomer = {
+            maKH,
+            tenKH,
+            sdt,
+            diaChi,
+            ngayTao,
+          };
+
+          // Lấy danh sách khách hàng hiện tại
+          let customers = JSON.parse(localStorage.getItem("customers")) || [];
+
+          // Kiểm tra trùng lặp
+          const exists = customers.some(
+            (customer) =>
+              customer.maKH === maKH &&
+              customer.tenKH.toLowerCase() === tenKH.toLowerCase()
+          );
+
+          if (!exists) {
+            customers.push(newCustomer);
+            localStorage.setItem("customers", JSON.stringify(customers));
+            alert("Thêm khách hàng thành công!");
+          } else {
+            alert("Khách hàng đã tồn tại!");
+          }
+
+          // Quay lại trang danh sách khách hàng
+          window.location.href = "khachhang.html";
+        } else {
+          alert("Vui lòng điền đầy đủ thông tin!");
+        }
+      });
+    </script>
+  </body>
+</html>

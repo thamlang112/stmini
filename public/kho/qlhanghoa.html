@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Hàng Hóa</title>
+    <link rel="stylesheet" href="qlhanghoa.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Quản Lý Hàng Hóa</h1>
+      <div class="input-section">
+        <input type="text" id="maHH" placeholder="Mã Hàng Hóa" />
+        <input type="text" id="xuatxu" placeholder="Xuất Xứ" />
+        <input type="text" id="dvt" placeholder="Đơn Vị Tính" />
+        <input type="text" id="tenHH" placeholder="Tên Hàng Hóa" />
+        <input type="number" id="giaNhap" placeholder="Giá Nhập" />
+        <input type="text" id="nhaCC" placeholder="Nhà Cung Cấp" />
+        <input type="number" id="soLuong" placeholder="Số Lượng" />
+        <input type="text" id="nh" placeholder="NH" />
+        <input type="number" id="giaBan" placeholder="Giá Bán" />
+        <input type="text" id="maVach" placeholder="Mã Vạch" />
+        <input type="text" id="trangThai" placeholder="Trạng Thái" />
+        <input type="text" id="thueVAT" placeholder="Thuế VAT" />
+        <button id="themHH">Thêm</button>
+      </div>
+    </div>
+
+    <script>
+      document.getElementById("themHH").addEventListener("click", function () {
+        const maHH = document.getElementById("maHH").value;
+        const xuatxu = document.getElementById("xuatxu").value;
+        const dvt = document.getElementById("dvt").value;
+        const tenHH = document.getElementById("tenHH").value;
+        const giaNhap = parseFloat(document.getElementById("giaNhap").value);
+        const nhaCC = document.getElementById("nhaCC").value;
+        const soLuong = parseInt(document.getElementById("soLuong").value);
+        const nh = document.getElementById("nh").value;
+        const giaBan = parseFloat(document.getElementById("giaBan").value);
+        const maVach = document.getElementById("maVach").value;
+        const trangThai = document.getElementById("trangThai").value;
+        const thueVAT = document.getElementById("thueVAT").value;
+
+        if (maHH && tenHH && soLuong > 0) {
+          const products = JSON.parse(localStorage.getItem("products")) || [];
+
+          // Kiểm tra nếu sản phẩm đã tồn tại
+          const existingProduct = products.find(
+            (product) => product.maHH === maHH
+          );
+          if (existingProduct) {
+            // Cộng thêm số lượng nếu sản phẩm đã tồn tại
+            existingProduct.soLuong += soLuong;
+          } else {
+            // Thêm sản phẩm mới
+            products.push({
+              maHH,
+              xuatxu,
+              dvt,
+              tenHH,
+              giaNhap,
+              nhaCC,
+              soLuong,
+              nh,
+              giaBan,
+              maVach,
+              trangThai,
+              thueVAT,
+            });
+          }
+
+          localStorage.setItem("products", JSON.stringify(products));
+          alert("Sản phẩm đã được thêm thành công!"); // Thông báo người dùng
+        } else {
+          alert("Vui lòng nhập đầy đủ thông tin sản phẩm!");
+        }
+      });
+    </script>
+  </body>
+</html>

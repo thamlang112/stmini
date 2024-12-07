@@ -1,0 +1,4 @@
+[
+    { "id": 1, "name": "Kẹo mút", "price": 1000, "category": "Kẹo" },
+    { "id": 2, "name": "Coca", "price": 20000, "category": "Đồ Uống" }
+]

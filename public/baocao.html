@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="baocao.css" />
+    <title>Báo Cáo</title>
+    <style>
+      body {
+        background-color: pink; /* Màu nền hồng */
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        flex-direction: column; /* Đặt hướng dọc cho container */
+        align-items: center; /* Căn giữa các phần tử */
+        padding: 20px;
+      }
+      .chart-container {
+        background-color: white; /* Nền trắng cho biểu đồ */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 400px; /* Đặt chiều rộng cho các biểu đồ */
+        margin-bottom: 20px; /* Khoảng cách giữa các biểu đồ */
+      }
+      h2 {
+        text-align: center; /* Căn giữa tiêu đề */
+      }
+      .transaction-history {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        width: 80%; /* Đặt chiều rộng cho lịch sử giao dịch */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      .transaction-history h3 {
+        text-align: center; /* Căn giữa tiêu đề lịch sử giao dịch */
+      }
+      .transaction-list {
+        list-style-type: none; /* Bỏ dấu chấm đầu dòng */
+        padding: 0; /* Bỏ padding */
+      }
+      .transaction-list li {
+        margin: 10px 0; /* Khoảng cách giữa các giao dịch */
+        padding: 10px;
+        border: 1px solid #ccc; /* Viền nhẹ cho từng giao dịch */
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="chart-container">
+        <h2>Sản Phẩm Bán Chạy</h2>
+        <canvas id="salesChart"></canvas>
+      </div>
+      <div class="chart-container">
+        <h2>Thống Kê Nhân Viên</h2>
+        <canvas id="employeeChart"></canvas>
+      </div>
+      <div class="transaction-history">
+        <h3>Lịch Sử Giao Dịch</h3>
+        <ul class="transaction-list" id="transactionList">
+          <!-- Danh sách giao dịch sẽ được hiển thị ở đây -->
+        </ul>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      // Hàm hiển thị biểu đồ sản phẩm bán chạy
+      function renderSalesChart() {
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+        const salesData = {};
+
+        products.forEach((product) => {
+          if (!salesData[product.tenHH]) {
+            salesData[product.tenHH] = 0;
+          }
+          salesData[product.tenHH] += product.soLuong; // Tính tổng số lượng bán của từng sản phẩm
+        });
+
+        const labels = Object.keys(salesData);
+        const data = Object.values(salesData);
+
+        const ctx = document.getElementById("salesChart").getContext("2d");
+        const salesChart = new Chart(ctx, {
+          type: "pie", // Biểu đồ tròn
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Số Lượng Bán",
+                data: data,
+                backgroundColor: [
+                  "rgba(75, 192, 192, 0.6)",
+                  "rgba(255, 99, 132, 0.6)",
+                  "rgba(255, 206, 86, 0.6)",
+                  "rgba(54, 162, 235, 0.6)",
+                  "rgba(153, 102, 255, 0.6)",
+                  "rgba(255, 159, 64, 0.6)",
+                ],
+                borderColor: [
+                  "rgba(75, 192, 192, 1)",
+                  "rgba(255, 99, 132, 1)",
+                  "rgba(255, 206, 86, 1)",
+                  "rgba(54, 162, 235, 1)",
+                  "rgba(153, 102, 255, 1)",
+                  "rgba(255, 159, 64, 1)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Sản Phẩm Bán Chạy",
+              },
+            },
+          },
+        });
+      }
+
+      // Hàm hiển thị biểu đồ thống kê nhân viên
+      function renderEmployeeChart() {
+        const employeeData =
+          JSON.parse(localStorage.getItem("employeeData")) || [];
+        const employeeStats = {};
+
+        employeeData.forEach((employee) => {
+          if (!employeeStats[employee.name]) {
+            employeeStats[employee.name] = 0;
+          }
+          employeeStats[employee.name] += employee.sales; // Tính tổng doanh thu của từng nhân viên
+        });
+
+        const labels = Object.keys(employeeStats);
+        const data = Object.values(employeeStats);
+
+        const ctx = document.getElementById("employeeChart").getContext("2d");
+        const employeeChart = new Chart(ctx, {
+          type: "pie", // Biểu đồ tròn
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Doanh Thu Nhân Viên",
+                data: data,
+                backgroundColor: [
+                  "rgba(255, 99, 132, 0.6)",
+                  "rgba(54, 162, 235, 0.6)",
+                  "rgba(255, 206, 86, 0.6)",
+                  "rgba(75, 192, 192, 0.6)",
+                  "rgba(153, 102, 255, 0.6)",
+                  "rgba(255, 159, 64, 0.6)",
+                ],
+                borderColor: [
+                  "rgba(255, 99, 132, 1)",
+                  "rgba(54, 162, 235, 1)",
+                  "rgba(255, 206, 86, 1)",
+                  "rgba(75, 192, 192, 1)",
+                  "rgba(153, 102, 255, 1)",
+                  "rgba(255, 159, 64, 1)",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Thống Kê Doanh Thu Nhân Viên",
+              },
+            },
+          },
+        });
+      }
+
+      // Hàm hiển thị lịch sử giao dịch
+      function renderTransactionHistory() {
+        const paymentHistory =
+          JSON.parse(localStorage.getItem("paymentHistory")) || [];
+        const transactionList = document.getElementById("transactionList");
+
+        paymentHistory.forEach((payment) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `Hóa Đơn ${payment.invoiceNumber}: Tổng ${payment.total} VNĐ, Tiền Khách Đưa ${payment.moneyGiven} VNĐ, Tiền Trả Lại ${payment.changeDue} VNĐ, Tiền Còn Nợ ${payment.amountDue} VNĐ, Ngày: ${payment.date}`;
+          transactionList.appendChild(listItem);
+        });
+      }
+
+      // Tải dữ liệu và hiển thị biểu đồ khi trang được tải
+      window.onload = function () {
+        renderSalesChart();
+        renderEmployeeChart();
+        renderTransactionHistory(); // Hiển thị lịch sử giao dịch
+      };
+    </script>
+  </body>
+</html>

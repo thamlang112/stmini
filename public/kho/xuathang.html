@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="xuathang.css" />
+    <title>Phiếu Xuất Hàng</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Phiếu Xuất Hàng</h1>
+      <div class="info">
+        <p>Số Phiếu Xuất: <span id="soPhieuXuat">222</span></p>
+        <p>
+          Nhân Viên Phụ Trách: <span id="nhanVienPhuTrach">Nguyễn Văn B</span>
+        </p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã Hàng Hóa</th>
+            <th>Tên Hàng Hóa</th>
+            <th>Xuất Xứ</th>
+            <th>Số Lượng</th>
+          </tr>
+        </thead>
+        <tbody id="xuatHangTableBody">
+          <!-- Dữ liệu sẽ được thêm vào đây -->
+        </tbody>
+      </table>
+      <div class="footer">
+        <p>
+          Nhân Viên Phụ Trách Ký Tên: <span id="kyTen">________________</span>
+        </p>
+      </div>
+    </div>
+
+    <script>
+      function loadExportReceipts() {
+        const invoiceData = JSON.parse(localStorage.getItem("currentInvoice"));
+
+        if (invoiceData) {
+          const tbody = document.getElementById("xuatHangTableBody");
+          tbody.innerHTML = ""; // Xóa nội dung cũ
+
+          // Tạo số phiếu xuất ngẫu nhiên
+          document.getElementById("soPhieuXuat").textContent = Math.floor(
+            Math.random() * 10000
+          );
+
+          // Thêm sản phẩm vào bảng
+          invoiceData.invoiceItems.forEach((item, index) => {
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${item.maHH || "N/A"}</td>
+                        <td>${item.name || "N/A"}</td>
+                        <td>${"N/A"}</td> <!-- Xuất xứ nếu có -->
+                        <td>${item.quantity || 0}</td>
+                    `;
+            tbody.appendChild(newRow);
+          });
+        } else {
+          const tbody = document.getElementById("xuatHangTableBody");
+          tbody.innerHTML =
+            "<tr><td colspan='5'>Không có dữ liệu xuất hàng.</td></tr>";
+        }
+      }
+
+      // Tải danh sách phiếu xuất khi trang được tải
+      window.onload = loadExportReceipts;
+    </script>
+  </body>
+</html>

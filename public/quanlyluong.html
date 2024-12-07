@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Lương</title>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        if (!sessionStorage.getItem('role') || sessionStorage.getItem('role') !== 'manager') {
+            window.location.href = 'login.html';
+        }
+
+        function calculateSalary() {
+            // Logic để tính lương cho nhân viên
+        }
+    </script>
+</head>
+<body>
+
+<header>
+    <h1>Quản Lý Lương</h1>
+</header>
+
+<nav>
+    <a href="index.html">Quay lại</a>
+</nav>
+
+<div class="container">
+    <h2>Tính Lương Nhân Viên</h2>
+    <input type="text" id="employee-id" placeholder="ID Nhân Viên" required>
+    <input type="number" id="working-days" placeholder="Số ngày làm việc" required>
+    <button onclick="calculateSalary()">Tính Lương</button>
+</div>
+
+</body>
+</html>

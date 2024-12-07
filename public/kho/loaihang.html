@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="loaihang.css" />
+    <title>Quản Lý Loại Hàng</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Quản Lý Loại Hàng</h1>
+      <div class="button-group">
+        <button id="them">Thêm</button>
+        <button id="sua">Sửa</button>
+        <button id="xoa">Xóa</button>
+        <button id="luu">Lưu</button>
+        <button id="thiet">Thoát</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã NCC</th>
+            <th>Tên Hàng Hóa</th>
+            <th>Xuất Xứ</th>
+            <th>Số Lượng</th>
+          </tr>
+        </thead>
+        <tbody id="loaiHangTableBody">
+          <!-- Dữ liệu sẽ được thêm vào đây -->
+        </tbody>
+      </table>
+      <div class="supplier-info">
+        <h3>Nhà Cung Cấp</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Mã NCC</th>
+              <th>Tên NCC</th>
+              <th>Địa Chỉ</th>
+              <th>SDT</th>
+            </tr>
+          </thead>
+          <tbody id="nccTableBody">
+            <!-- Dữ liệu nhà cung cấp sẽ được thêm vào đây -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="loaihang.js"></script>
+  </body>
+</html>

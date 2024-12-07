@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Nhân Viên</title>
+    <link rel="stylesheet" href="nhanvien.css" />
+    <script src="nhanvien.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Quản Lý Nhân Viên</h1>
+      <div class="input-section">
+        <input type="text" id="maNV" placeholder="Mã Nhân Viên" />
+        <input type="text" id="tenNV" placeholder="Tên Nhân Viên" />
+        <input type="text" id="sdt" placeholder="SĐT" />
+        <input type="text" id="diaChi" placeholder="Địa Chỉ" />
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <input type="date" id="ngaySinh" placeholder="Ngày Sinh" />
+        <input type="number" id="luong" placeholder="Lương" />
+        <button id="themNV">Thêm Nhân Viên</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã NV</th>
+            <th>Tên NV</th>
+            <th>SĐT</th>
+            <th>Địa Chỉ</th>
+            <th>Username</th>
+            <th>Password</th>
+            <th>Ngày Sinh</th>
+            <th>Lương</th>
+            <th>Hành Động</th>
+          </tr>
+        </thead>
+        <tbody id="employeeTableBody">
+          <!-- Dữ liệu nhân viên sẽ được hiển thị ở đây -->
+        </tbody>
+      </table>
+      <div class="buttons">
+        <button id="lamMoi">Làm Mới</button>
+      </div>
+    </div>
+
+    <script>
+      const isAdmin = sessionStorage.getItem("role") === "manager"; // Kiểm tra quyền quản lý
+
+      // Hàm tải dữ liệu nhân viên từ localStorage
+      function loadEmployees() {
+        const employees = JSON.parse(localStorage.getItem("employees")) || [];
+        const tbody = document.getElementById("employeeTableBody");
+        tbody.innerHTML = ""; // Xóa nội dung cũ
+
+        employees.forEach((employee, index) => {
+          const newRow = document.createElement("tr");
+          newRow.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${employee.maNV}</td>
+                    <td>${employee.tenNV}</td>
+                    <td>${employee.sdt}</td>
+                    <td>${employee.diaChi}</td>
+                    <td>${employee.username}</td>
+                    <td>${employee.password}</td>
+                    <td>${employee.ngaySinh}</td>
+                    <td>${employee.luong}</td>
+                    ${
+                      isAdmin
+                        ? `<td><button class="deleteBtn" data-maNV="${employee.maNV}">Xóa</button></td>`
+                        : ""
+                    }
+                `;
+          tbody.appendChild(newRow);
+        });
+
+        // Lắng nghe sự kiện xóa nhân viên
+        if (isAdmin) {
+          document.querySelectorAll(".deleteBtn").forEach((button) => {
+            button.addEventListener("click", function () {
+              const maNV = this.getAttribute("data-maNV");
+              deleteEmployee(maNV);
+            });
+          });
+        }
+      }
+
+      // Hàm thêm nhân viên
+      document.getElementById("themNV").addEventListener("click", function () {
+        const maNV = document.getElementById("maNV").value.trim();
+        const tenNV = document.getElementById("tenNV").value.trim();
+        const sdt = document.getElementById("sdt").value.trim();
+        const diaChi = document.getElementById("diaChi").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value.trim();
+        const ngaySinh = document.getElementById("ngaySinh").value.trim();
+        const luong = parseFloat(document.getElementById("luong").value.trim());
+
+        if (
+          maNV &&
+          tenNV &&
+          sdt &&
+          diaChi &&
+          username &&
+          password &&
+          ngaySinh &&
+          luong
+        ) {
+          const employees = JSON.parse(localStorage.getItem("employees")) || [];
+
+          // Kiểm tra mã nhân viên có trùng không
+          const existingEmployee = employees.find((emp) => emp.maNV === maNV);
+          if (existingEmployee) {
+            alert(
+              "Mã nhân viên đã tồn tại! Vui lòng nhập lại tất cả thông tin."
+            );
+            // Xóa tất cả các trường nhập
+            document.getElementById("maNV").value = "";
+            document.getElementById("tenNV").value = "";
+            document.getElementById("sdt").value = "";
+            document.getElementById("diaChi").value = "";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("ngaySinh").value = "";
+            document.getElementById("luong").value = "";
+            return; // Ngăn không cho thêm nhân viên
+          }
+
+          const newEmployee = {
+            maNV,
+            tenNV,
+            sdt,
+            diaChi,
+            username,
+            password,
+            ngaySinh,
+            luong,
+          };
+          employees.push(newEmployee);
+          localStorage.setItem("employees", JSON.stringify(employees));
+          alert("Nhân viên đã được thêm thành công!");
+          loadEmployees(); // Tải lại danh sách nhân viên
+
+          // Xóa dữ liệu nhập sau khi thêm
+          document.getElementById("maNV").value = "";
+          document.getElementById("tenNV").value = "";
+          document.getElementById("sdt").value = "";
+          document.getElementById("diaChi").value = "";
+          document.getElementById("username").value = "";
+          document.getElementById("password").value = "";
+          document.getElementById("ngaySinh").value = "";
+          document.getElementById("luong").value = "";
+        } else {
+          alert("Vui lòng nhập đầy đủ thông tin nhân viên!");
+        }
+      });
+
+      // Hàm xóa nhân viên
+      function deleteEmployee(maNV) {
+        const employees = JSON.parse(localStorage.getItem("employees")) || [];
+        const updatedEmployees = employees.filter((emp) => emp.maNV !== maNV);
+        localStorage.setItem("employees", JSON.stringify(updatedEmployees));
+        alert("Nhân viên đã được xóa thành công!");
+        loadEmployees(); // Tải lại danh sách nhân viên
+      }
+
+      // Hàm làm mới bảng nhân viên
+      document
+        .getElementById("lamMoi")
+        .addEventListener("click", loadEmployees);
+
+      // Tải nhân viên khi trang được tải
+      window.onload = loadEmployees;
+    </script>
+  </body>
+</html>

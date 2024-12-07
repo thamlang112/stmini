@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Ký Tài Khoản</title>
+    <link rel="stylesheet" href="dangky.css" />
+    <script src="dangky.js" defer></script>
+    <script>
+      // Kiểm tra vai trò
+      window.onload = function () {
+        if (sessionStorage.getItem("role") !== "manager") {
+          alert("Bạn không có quyền truy cập trang này.");
+          window.location.href = "login.html"; // Chuyển về trang đăng nhập
+        }
+      };
+
+      function register() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const tenNV = document.getElementById("tenNV").value;
+        const notification = document.getElementById("notification");
+
+        // Kiểm tra thông tin đầu vào
+        if (username === "" || password === "" || tenNV === "") {
+          notification.innerText = "Vui lòng điền đầy đủ thông tin.";
+          notification.style.color = "red";
+          return;
+        }
+
+        // Lưu tài khoản vào localStorage
+        let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+        const existingAccount = accounts.find(
+          (acc) => acc.username === username
+        );
+
+        if (existingAccount) {
+          notification.innerText =
+            "Username đã tồn tại. Vui lòng chọn username khác.";
+          notification.style.color = "red";
+        } else {
+          accounts.push({ username, password, tenNV });
+          localStorage.setItem("accounts", JSON.stringify(accounts));
+          notification.innerText =
+            "Đăng ký thành công! Bạn có thể quay lại trang đăng nhập.";
+          notification.style.color = "green";
+          clearFields();
+        }
+      }
+
+      function clearFields() {
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+        document.getElementById("tenNV").value = "";
+      }
+
+      document.getElementById("dangKy").addEventListener("click", register);
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Đăng Ký Tài Khoản Nhân Viên</h1>
+      <div class="input-section">
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <input type="text" id="tenNV" placeholder="Tên Nhân Viên" />
+        <button id="dangKy">Đăng Ký</button>
+      </div>
+      <div class="notification" id="notification"></div>
+      <div class="buttons">
+        <button onclick="window.location.href='index.html'">Quay lại</button>
+      </div>
+    </div>
+  </body>
+</html>

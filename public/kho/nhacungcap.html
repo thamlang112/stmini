@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="nhacc.css" />
+    <title>Quản Lý Nhà Cung Cấp</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Quản Lý Nhà Cung Cấp</h1>
+      <form id="nccForm">
+        <div class="form-group">
+          <label for="maNCC">Mã NCC:</label>
+          <input type="text" id="maNCC" placeholder="Nhập mã NCC" required />
+        </div>
+        <div class="form-group">
+          <label for="tenNCC">Tên NCC:</label>
+          <input type="text" id="tenNCC" placeholder="Nhập tên NCC" required />
+        </div>
+        <div class="form-group">
+          <label for="diaChi">Địa Chỉ:</label>
+          <input type="text" id="diaChi" placeholder="Nhập địa chỉ" required />
+        </div>
+        <div class="form-group">
+          <label for="sdt">SĐT:</label>
+          <input
+            type="tel"
+            id="sdt"
+            placeholder="Nhập số điện thoại"
+            required
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" id="them">Thêm</button>
+          <button type="button" id="sua">Sửa</button>
+          <button type="button" id="xoa">Xóa</button>
+          <button type="button" id="luu">Lưu</button>
+          <button type="button" id="thiet">Thoát</button>
+        </div>
+      </form>
+      <table>
+        <thead>
+          <tr>
+            <th>Mã NCC</th>
+            <th>Tên NCC</th>
+            <th>Địa Chỉ</th>
+            <th>SDT</th>
+          </tr>
+        </thead>
+        <tbody id="nccTableBody">
+          <!-- Dữ liệu sẽ được thêm vào đây -->
+        </tbody>
+      </table>
+    </div>
+
+    <script src="nhacc.js"></script>
+  </body>
+</html>

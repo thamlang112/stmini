@@ -1,0 +1,6 @@
+[
+    { "id": 1, "name": "Quản Lý", "gender": "Nam", "dob": "1980-01-01", "department": "Quản Lý" },
+    { "id": 2, "name": "Nhân Viên 1", "gender": "Nữ", "dob": "1990-01-01", "department": "Thu Ngân" },
+    { "id": 3, "name": "Nhân Viên 2", "gender": "Nam", "dob": "1991-01-01", "department": "Kho" },
+    { "id": 4, "name": "Nhân Viên 3", "gender": "Nữ", "dob": "1992-01-01", "department": "Bán Hàng" }
+]

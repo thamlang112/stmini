@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="doanhthu.css" />
+    <title>Báo Cáo Doanh Thu</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>Doanh Thu</h1>
+      <canvas id="doanhthuChart" width="400" height="200"></canvas>
+      <div class="summary">
+        <div class="box">
+          <h2>Tổng Doanh Thu</h2>
+          <p id="tongDoanhThu">0 VNĐ</p>
+        </div>
+        <div class="box">
+          <h2>Tổng Đơn Hàng</h2>
+          <p id="tongDonHang">0</p>
+        </div>
+        <div class="box">
+          <h2>Sản Phẩm Trong Kho</h2>
+          <p id="sanPhamKho">0</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      function calculateRevenue() {
+        const totalRevenue =
+          JSON.parse(localStorage.getItem("totalRevenue")) || 0;
+        const totalOrders =
+          JSON.parse(localStorage.getItem("totalOrders")) || 0;
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+        let totalStock = 0;
+
+        products.forEach((product) => {
+          totalStock += product.soLuong; // Tổng số sản phẩm trong kho
+        });
+
+        document.getElementById("tongDoanhThu").textContent =
+          totalRevenue + " VNĐ";
+        document.getElementById("tongDonHang").textContent = totalOrders;
+        document.getElementById("sanPhamKho").textContent = totalStock;
+      }
+
+      function renderChart() {
+        const products = JSON.parse(localStorage.getItem("products")) || [];
+        const salesData = {};
+
+        products.forEach((product) => {
+          if (!salesData[product.tenHH]) {
+            salesData[product.tenHH] = 0;
+          }
+          salesData[product.tenHH] += product.giaBan * product.soLuong; // Tính tổng doanh thu của từng sản phẩm
+        });
+
+        const labels = Object.keys(salesData);
+        const data = Object.values(salesData);
+
+        const ctx = document.getElementById("doanhthuChart").getContext("2d");
+        const doanhthuChart = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Doanh Thu",
+                data: data,
+                backgroundColor: "rgba(75, 192, 192, 0.6)",
+                borderColor: "rgba(75, 192, 192, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Doanh Thu Theo Sản Phẩm",
+              },
+            },
+          },
+        });
+      }
+
+      window.onload = function () {
+        calculateRevenue();
+        renderChart();
+      };
+    </script>
+  </body>
+</html>

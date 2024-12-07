@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Khách Hàng</title>
+    <link rel="stylesheet" href="khachhang.css" />
+    <script src="khachhang.js" defer></script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Quản Lý Khách Hàng</h1>
+      <div class="input-section">
+        <input type="text" id="maKH" placeholder="Mã Khách Hàng" />
+        <input type="text" id="tenKH" placeholder="Tên Khách Hàng" />
+        <input type="text" id="sdt" placeholder="SĐT" />
+        <input type="text" id="diaChi" placeholder="Địa Chỉ" />
+        <input type="date" id="ngayTao" placeholder="Ngày Tạo" />
+        <button id="themKH">Thêm Khách Hàng</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>STT</th>
+            <th>Mã KH</th>
+            <th>Tên KH</th>
+            <th>Địa Chỉ</th>
+            <th>SĐT</th>
+            <th>Hành Động</th>
+            <th>Ngày Tạo</th>
+          </tr>
+        </thead>
+        <tbody id="customerTableBody">
+          <!-- Dữ liệu khách hàng sẽ được hiển thị ở đây -->
+        </tbody>
+      </table>
+      <div class="buttons">
+        <button id="lamMoi">Làm Mới</button>
+      </div>
+    </div>
+  </body>
+</html>

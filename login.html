@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Đăng Nhập</title>
+    <link rel="stylesheet" href="public/login.css" />
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+      }
+      .login-container {
+        background: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container" id="login-container">
+      <h2>ĐĂNG NHẬP</h2>
+      <div id="login-form">
+        <div class="form-group">
+          <input type="text" id="username" placeholder="Username" required />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            id="password"
+            placeholder="Mật khẩu"
+            required
+          />
+        </div>
+        <div class="form-options">
+          <label>
+            <input type="checkbox" id="remember-me" /> Ghi nhớ tôi
+          </label>
+          <a href="#" class="forgot-password" onclick="showForgotPassword()"
+            >Quên mật khẩu?</a
+          >
+        </div>
+        <button onclick="login()">ĐĂNG NHẬP</button>
+        <p id="message" style="color: red"></p>
+      </div>
+
+      <div id="forgot-password-form" style="display: none">
+        <h2>Quên Mật Khẩu</h2>
+        <div class="form-group">
+          <input type="text" id="phone" placeholder="Số điện thoại" required />
+        </div>
+        <button onclick="resetPassword()">Gửi Mật Khẩu Mới</button>
+        <button onclick="hideForgotPassword()">Quay lại</button>
+        <p id="reset-message" style="color: green"></p>
+      </div>
+
+      <button id="logout-button" style="display: none" onclick="logout()">
+        ĐĂNG XUẤT
+      </button>
+    </div>
+
+    <script>
+      // Kiểm tra trạng thái đăng nhập khi mở trang
+      window.onload = function () {
+        if (sessionStorage.getItem("role")) {
+          const role = sessionStorage.getItem("role");
+          if (role === "manager") {
+            document.getElementById("logout-button").style.display = "block";
+            window.location.href = "index.html"; // Chuyển đến trang quản lý
+          } else if (role === "employee") {
+            window.location.href = "index_employee.html"; // Chuyển đến trang nhân viên
+          }
+        }
+      };
+
+      function login() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // Kiểm tra thông tin đăng nhập
+        if (username === "phinam" && password === "nam112") {
+          sessionStorage.setItem("role", "manager");
+          window.location.href = "index.html"; // Chuyển đến trang quản lý
+        } else {
+          // Kiểm tra trong localStorage cho tài khoản nhân viên
+          let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+          const account = accounts.find(
+            (acc) => acc.username === username && acc.password === password
+          );
+
+          if (account) {
+            sessionStorage.setItem("role", "employee");
+            window.location.href = "index_employee.html"; // Chuyển đến trang nhân viên
+          } else {
+            document.getElementById("message").innerText =
+              "Tên đăng nhập hoặc mật khẩu không đúng.";
+          }
+        }
+      }
+
+      function logout() {
+        sessionStorage.removeItem("role"); // Xóa thông tin đăng nhập
+        window.location.href = "login.html"; // Quay lại trang đăng nhập
+      }
+
+      function showForgotPassword() {
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("forgot-password-form").style.display = "block";
+      }
+
+      function hideForgotPassword() {
+        document.getElementById("forgot-password-form").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+      }
+
+      function resetPassword() {
+        const phone = document.getElementById("phone").value;
+
+        if (phone === "0343074071") {
+          document.getElementById("reset-message").innerText =
+            "Mật khẩu mới đã được gửi qua số điện thoại của bạn.";
+        } else {
+          document.getElementById("reset-message").innerText =
+            "Số điện thoại không hợp lệ.";
+        }
+      }
+    </script>
+  </body>
+</html>

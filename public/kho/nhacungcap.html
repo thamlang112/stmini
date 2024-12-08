@@ -5,55 +5,374 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="nhacc.css" />
     <title>Quản Lý Nhà Cung Cấp</title>
+    <style>
+      .button-group {
+        display: flex;
+        gap: 10px; /* Khoảng cách giữa các nút */
+      }
+
+      .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white; /* Màu chữ trắng */
+        cursor: pointer;
+      }
+
+      .green {
+        background-color: #4caf50; /* Màu xanh lá */
+      }
+
+      .search-bar input[type="text"] {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        flex-grow: 1; /* Để ô tìm kiếm chiếm hết không gian còn lại */
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between; /* Căn chỉnh các phần tử */
+        align-items: center; /* Căn giữa theo chiều dọc */
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none; /* Ẩn modal theo mặc định */
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 600px;
+        border-radius: 8px;
+      }
+
+      .input-group {
+        margin-bottom: 10px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      .input-group input,
+      .input-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <h1>Quản Lý Nhà Cung Cấp</h1>
-      <form id="nccForm">
-        <div class="form-group">
-          <label for="maNCC">Mã NCC:</label>
-          <input type="text" id="maNCC" placeholder="Nhập mã NCC" required />
+      <h1>Nhà Cung Cấp</h1>
+      <div class="content">
+        <div class="left-panel">
+          <div class="group">
+            <label for="nhomNCC">Nhóm NCC</label>
+            <div class="input-container">
+              <select id="nhomNCC">
+                <option>Tất cả các nhóm</option>
+              </select>
+              <button class="edit-button">+</button>
+            </div>
+          </div>
+
+          <div class="group">
+            <label for="tongMua">Tổng mua</label>
+            <div class="input-container">
+              <label>Từ:</label>
+              <input type="text" id="tongMuaFrom" placeholder="Giá trị" />
+            </div>
+            <div class="input-container">
+              <label>Đến:</label>
+              <input type="text" id="tongMuaTo" placeholder="Giá trị" />
+            </div>
+            <div class="radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="tongMua"
+                  value="toanThoiGian"
+                  checked
+                />
+                Toàn thời gian
+              </label>
+              <label>
+                <input type="radio" name="tongMua" value="luaChonKhac" />
+                Lựa chọn khác
+              </label>
+            </div>
+          </div>
+
+          <div class="group">
+            <label for="noHienTai">Nợ hiện tại</label>
+            <div class="input-container">
+              <label>Từ:</label>
+              <input type="text" id="noHienTaiFrom" placeholder="Giá trị" />
+            </div>
+            <div class="input-container">
+              <label>Đến:</label>
+              <input type="text" id="noHienTaiTo" placeholder="Giá trị" />
+            </div>
+          </div>
+
+          <div class="group">
+            <label>Trạng thái</label>
+            <div class="radio-group">
+              <label>
+                <input type="radio" name="trangThai" value="tatCa" checked />
+                Tất cả
+              </label>
+              <label>
+                <input type="radio" name="trangThai" value="dangHoatDong" />
+                Đang hoạt động
+              </label>
+              <label>
+                <input type="radio" name="trangThai" value="ngungHoatDong" />
+                Ngừng hoạt động
+              </label>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="tenNCC">Tên NCC:</label>
-          <input type="text" id="tenNCC" placeholder="Nhập tên NCC" required />
+
+        <div class="right-panel">
+          <div class="header">
+            <div class="search-bar">
+              <input type="text" placeholder="Tìm kiếm nhà cung cấp..." />
+            </div>
+            <div class="button-group">
+              <button type="button" class="btn green" id="nhapNCC">
+                Nhà cung cấp
+              </button>
+              <button type="button" class="btn green" id="import">
+                Import
+              </button>
+              <button type="button" class="btn green" id="xuatFile">
+                Xuất File
+              </button>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox" id="selectAll" /></th>
+                <th>Mã nhà cung cấp</th>
+                <th>Tên nhà cung cấp</th>
+                <th>Điện thoại</th>
+                <th>Email</th>
+                <th>Nợ hiện tại</th>
+                <th>Tổng mua</th>
+              </tr>
+            </thead>
+            <tbody id="nccTableBody">
+              <tr data-code="NC0004" data-name="Nhà Cung Cấp 1">
+                <td><input type="checkbox" /></td>
+                <td>NC0004</td>
+                <td>Công ty Hồng Phúc</td>
+                <td>0123456789</td>
+                <td>hongphuc@example.com</td>
+                <td>500000</td>
+                <td>2000000</td>
+              </tr>
+              <tr data-code="NC0005" data-name="Nhà Cung Cấp 2">
+                <td><input type="checkbox" /></td>
+                <td>NC0005</td>
+                <td>Công ty Đại Việt</td>
+                <td>0987654321</td>
+                <td>daiviet@example.com</td>
+                <td>300000</td>
+                <td>1500000</td>
+              </tr>
+              <tr data-code="NC0003" data-name="Nhà Cung Cấp 3">
+                <td><input type="checkbox" /></td>
+                <td>NC0003</td>
+                <td>Công ty Pharmedic</td>
+                <td>0345363346</td>
+                <td>pharmedic@example.com</td>
+                <td>500000</td>
+                <td>1550000</td>
+              </tr>
+              <tr data-code="NC0004" data-name="Nhà Cung Cấp 4">
+                <td><input type="checkbox" /></td>
+                <td>NC0004</td>
+                <td>Công ty TNHH Chigo</td>
+                <td>093456363366</td>
+                <td>chigo@example.com</td>
+                <td>100000</td>
+                <td>900000</td>
+              </tr>
+              <tr data-code="NC0001" data-name="Nhà Cung Cấp 5">
+                <td><input type="checkbox" /></td>
+                <td>NC0001</td>
+                <td>Công ty Hòa Giang</td>
+                <td>093636345454</td>
+                <td>hoagiang@example.com</td>
+                <td>1000</td>
+                <td>980000</td>
+              </tr>
+              <!-- Thêm các nhà cung cấp khác nếu cần -->
+            </tbody>
+          </table>
         </div>
-        <div class="form-group">
-          <label for="diaChi">Địa Chỉ:</label>
-          <input type="text" id="diaChi" placeholder="Nhập địa chỉ" required />
+      </div>
+    </div>
+
+    <!-- Modal Thêm Nhà Cung Cấp -->
+    <div class="modal" id="modal">
+      <div class="modal-content">
+        <h2>Thêm Nhà Cung Cấp</h2>
+        <div class="input-group">
+          <label for="maNCC">Mã nhà cung cấp</label>
+          <input type="text" id="maNCC" placeholder="Mã mặc định" />
         </div>
-        <div class="form-group">
-          <label for="sdt">SĐT:</label>
-          <input
-            type="tel"
-            id="sdt"
-            placeholder="Nhập số điện thoại"
-            required
-          />
+        <div class="input-group">
+          <label for="tenNCC">Tên nhà cung cấp</label>
+          <input type="text" id="tenNCC" placeholder="Tên nhà cung cấp" />
+        </div>
+        <div class="input-group">
+          <label for="dienThoai">Điện thoại</label>
+          <input type="text" id="dienThoai" placeholder="Điện thoại" />
+        </div>
+        <div class="input-group">
+          <label for="email">Email</label>
+          <input type="text" id="email" placeholder="Email" />
+        </div>
+        <div class="input-group">
+          <label for="congTy">Công ty</label>
+          <input type="text" id="congTy" placeholder="Công ty" />
+        </div>
+        <div class="input-group">
+          <label for="diaChi">Địa chỉ</label>
+          <input type="text" id="diaChi" placeholder="Địa chỉ" />
+        </div>
+        <div class="input-group">
+          <label for="khuVuc">Khu vực</label>
+          <select id="khuVuc">
+            <option>Chọn Tỉnh/TP</option>
+            <option>Hà Nội</option>
+            <option>TP.Hồ Chí Minh</option>
+            <!-- Thêm các khu vực khác nếu cần -->
+          </select>
+        </div>
+        <div class="input-group">
+          <label for="phuongXa">Phường/Xã</label>
+          <input type="text" id="phuongXa" placeholder="Phường/Xã" />
         </div>
         <div class="button-group">
-          <button type="submit" id="them">Thêm</button>
-          <button type="button" id="sua">Sửa</button>
-          <button type="button" id="xoa">Xóa</button>
-          <button type="button" id="luu">Lưu</button>
-          <button type="button" id="thiet">Thoát</button>
+          <button class="btn green" id="saveButton">Lưu</button>
+          <button class="btn" id="closeModal">Đóng</button>
         </div>
-      </form>
-      <table>
-        <thead>
-          <tr>
-            <th>Mã NCC</th>
-            <th>Tên NCC</th>
-            <th>Địa Chỉ</th>
-            <th>SDT</th>
-          </tr>
-        </thead>
-        <tbody id="nccTableBody">
-          <!-- Dữ liệu sẽ được thêm vào đây -->
-        </tbody>
-      </table>
+      </div>
+    </div>
+
+    <!-- Modal Import -->
+    <div class="modal" id="importModal">
+      <div class="modal-content">
+        <h2>Nhập nhà cung cấp từ file Excel</h2>
+        <div class="input-group">
+          <label>
+            <input type="radio" name="updateOption" value="update" checked />
+            Cập nhật dữ liệu mới
+          </label>
+          <label>
+            <input type="radio" name="updateOption" value="noUpdate" />
+            Không cập nhật dữ liệu mới
+          </label>
+        </div>
+        <div class="input-group">
+          <label for="fileInput">Chọn file dữ liệu</label>
+          <input type="file" id="fileInput" accept=".xls,.xlsx" />
+        </div>
+        <div class="button-group">
+          <button class="btn green" id="importSubmit">Nhập dữ liệu</button>
+          <button class="btn" id="closeImportModal">Đóng</button>
+        </div>
+      </div>
     </div>
 
     <script src="nhacc.js"></script>
+    <script>
+      // JavaScript để mở và đóng modal
+      document.getElementById("nhapNCC").onclick = function () {
+        document.getElementById("modal").style.display = "block"; // Hiện modal
+      };
+
+      document.getElementById("import").onclick = function () {
+        document.getElementById("importModal").style.display = "block"; // Hiện modal import
+      };
+
+      document.getElementById("closeModal").onclick = function () {
+        document.getElementById("modal").style.display = "none"; // Ẩn modal thêm nhà cung cấp
+      };
+
+      document.getElementById("closeImportModal").onclick = function () {
+        document.getElementById("importModal").style.display = "none"; // Ẩn modal import
+      };
+
+      document.getElementById("saveButton").onclick = function () {
+        alert("Thông tin nhà cung cấp đã được lưu!");
+        document.getElementById("modal").style.display = "none"; // Đóng modal sau khi lưu
+      };
+
+      document.getElementById("importSubmit").onclick = function () {
+        alert("Dữ liệu đã được nhập từ file!");
+        document.getElementById("importModal").style.display = "none"; // Đóng modal sau khi nhập
+      };
+
+      document.getElementById("nhapNCC").onclick = function () {
+        window.location.href = "nhacungcap1.html"; // Chuyển đến nhacungcap1.html
+      };
+
+      document.getElementById("xuatFile").onclick = function () {
+        const confirmation = confirm("Bạn có muốn tải xuống file không?");
+        if (confirmation) {
+          // Thay đổi đường dẫn file tại đây
+          window.location.href = "path/to/your/file.xlsx"; // Đường dẫn đến file thực tế
+        }
+      };
+
+      // Tìm kiếm nhà cung cấp
+      document
+        .querySelector('.search-bar input[type="text"]')
+        .addEventListener("input", function () {
+          const searchTerm = this.value.toLowerCase();
+          const rows = document.querySelectorAll("#nccTableBody tr");
+
+          rows.forEach((row) => {
+            const code = row.getAttribute("data-code").toLowerCase();
+            const name = row.getAttribute("data-name").toLowerCase();
+            if (code.includes(searchTerm) || name.includes(searchTerm)) {
+              row.style.display = ""; // Hiện hàng
+            } else {
+              row.style.display = "none"; // Ẩn hàng
+            }
+          });
+        });
+
+      // Ngăn chặn click ra ngoài modal để đóng modal
+      window.onclick = function (event) {
+        if (event.target == document.getElementById("modal")) {
+          document.getElementById("modal").style.display = "none";
+        }
+        if (event.target == document.getElementById("importModal")) {
+          document.getElementById("importModal").style.display = "none";
+        }
+      };
+    </script>
   </body>
 </html>

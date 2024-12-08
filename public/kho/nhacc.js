@@ -29,6 +29,14 @@ document.getElementById("nhapNCC").onclick = function () {
   window.location.href = "nhacungcap1.html"; // Chuyển đến nhacungcap1.html
 };
 
+document.getElementById("xuatFile").onclick = function () {
+  const confirmation = confirm("Bạn có muốn tải xuống file không?");
+  if (confirmation) {
+    // Thay đổi đường dẫn file tại đây
+    window.location.href = "path/to/your/file.xlsx"; // Đường dẫn đến file thực tế
+  }
+};
+
 // Tìm kiếm nhà cung cấp
 document
   .querySelector('.search-bar input[type="text"]')

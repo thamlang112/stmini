@@ -1,84 +1,83 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const nccTableBody = document.getElementById("nccTableBody");
+// JavaScript để mở và đóng modal
+document.getElementById("nhapNCC").onclick = function () {
+  document.getElementById("modal").style.display = "block"; // Hiện modal
+};
 
-  // Thêm dữ liệu mẫu
-  // const sampleData = [
-  //   {
-  //     maNCC: "NC0004",
-  //     tenNCC: "Công ty Hồng Phúc",
-  //     sdt: "0123456789",
-  //     email: "hongphuc@example.com",
-  //     noHienTai: 5000,
-  //     tongMua: 100000,
-  //   },
-  //   {
-  //     maNCC: "NC0005",
-  //     tenNCC: "Công ty Đại Việt",
-  //     sdt: "0987654321",
-  //     email: "daiviet@example.com",
-  //     noHienTai: 3000,
-  //     tongMua: 75000,
-  //   },
-  //   {
-  //     maNCC: "NC0003",
-  //     tenNCC: "Công ty Pharmedic",
-  //     sdt: "0112233445",
-  //     email: "pharmedic@example.com",
-  //     noHienTai: 7000,
-  //     tongMua: 150000,
-  //   },
-  //   {
-  //     maNCC: "NC0001",
-  //     tenNCC: "Công ty TNHH Chigo",
-  //     sdt: "0123456789",
-  //     email: "chigo@example.com",
-  //     noHienTai: 2000,
-  //     tongMua: 50000,
-  //   },
-  //   {
-  //     maNCC: "NC0002",
-  //     tenNCC: "Công ty Hòa Giang",
-  //     sdt: "0987654321",
-  //     email: "hoagiang@example.com",
-  //     noHienTai: 10000,
-  //     tongMua: 200000,
-  //   },
-  // ];
+document.getElementById("import").onclick = function () {
+  document.getElementById("importModal").style.display = "block"; // Hiện modal import
+};
 
-  // Hiển thị dữ liệu mẫu
-  sampleData.forEach((data) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-          <td><input type="checkbox" /></td>
-          <td>${data.maNCC}</td>
-          <td>${data.tenNCC}</td>
-          <td>${data.sdt}</td>
-          <td>${data.email}</td>
-          <td>${data.noHienTai}</td>
-          <td>${data.tongMua}</td>
-      `;
-    nccTableBody.appendChild(row);
-  });
+document.getElementById("closeModal").onclick = function () {
+  document.getElementById("modal").style.display = "none"; // Ẩn modal thêm nhà cung cấp
+};
 
-  // Checkbox chọn tất cả
-  document.getElementById("selectAll").addEventListener("change", function () {
-    const checkboxes = nccTableBody.querySelectorAll("input[type='checkbox']");
-    checkboxes.forEach((checkbox) => {
-      checkbox.checked = this.checked;
+document.getElementById("closeImportModal").onclick = function () {
+  document.getElementById("importModal").style.display = "none"; // Ẩn modal import
+};
+
+document.getElementById("saveButton").onclick = function () {
+  alert("Thông tin nhà cung cấp đã được lưu!");
+  document.getElementById("modal").style.display = "none"; // Đóng modal sau khi lưu
+};
+
+document.getElementById("importSubmit").onclick = function () {
+  alert("Dữ liệu đã được nhập từ file!");
+  document.getElementById("importModal").style.display = "none"; // Đóng modal sau khi nhập
+};
+
+document.getElementById("nhapNCC").onclick = function () {
+  window.location.href = "nhacungcap1.html"; // Chuyển đến nhacungcap1.html
+};
+
+// Tìm kiếm nhà cung cấp
+document
+  .querySelector('.search-bar input[type="text"]')
+  .addEventListener("input", function () {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll("#nccTableBody tr");
+
+    rows.forEach((row) => {
+      const code = row.getAttribute("data-code").toLowerCase();
+      const name = row.getAttribute("data-name").toLowerCase();
+      if (code.includes(searchTerm) || name.includes(searchTerm)) {
+        row.style.display = ""; // Hiện hàng
+      } else {
+        row.style.display = "none"; // Ẩn hàng
+      }
     });
   });
 
-  // Mở modal khi nhấn nút "Nhà cung cấp"
-  document.getElementById("nhapNCC").onclick = function () {
-    // Mở modal
-    document.querySelector(".modal").style.display = "flex";
-  };
-  document.getElementById("nhapNCC").onclick = function () {
-    window.location.href = "nhacungcap1.html"; // Chuyển đến nhacungcap1.html
-  };
+// Ngăn chặn click ra ngoài modal để đóng modal
+window.onclick = function (event) {
+  if (event.target == document.getElementById("modal")) {
+    document.getElementById("modal").style.display = "none";
+  }
+  if (event.target == document.getElementById("importModal")) {
+    document.getElementById("importModal").style.display = "none";
+  }
+};
 
-  // Đóng modal khi nhấn nút "Đóng"
-  document.querySelector(".btn.cancel").onclick = function () {
-    document.querySelector(".modal").style.display = "none";
-  };
+// Cập nhật hiển thị các cột dựa trên checkbox
+document.querySelectorAll(".column-toggle").forEach((checkbox) => {
+  checkbox.addEventListener("change", function () {
+    const columnIndex = this.getAttribute("data-column");
+    const tableRows = document.querySelectorAll("#nccTableBody tr");
+
+    tableRows.forEach((row) => {
+      const cell = row.cells[columnIndex];
+      if (this.checked) {
+        cell.classList.remove("hidden"); // Hiện cell
+      } else {
+        cell.classList.add("hidden"); // Ẩn cell
+      }
+    });
+    // Cập nhật tiêu đề cột
+    const headerCell =
+      document.querySelectorAll("#nccTable thead th")[columnIndex];
+    if (this.checked) {
+      headerCell.classList.remove("hidden");
+    } else {
+      headerCell.classList.add("hidden");
+    }
+  });
 });

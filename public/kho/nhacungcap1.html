@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="nhacc.css" />
+    <title>Thêm Nhà Cung Cấp</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+      }
+
+      .modal {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.6);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        width: 1000px; /* Kích thước khung rộng hơn */
+        max-width: 90%;
+      }
+
+      h2 {
+        margin: 0 0 20px;
+        text-align: center;
+        color: #4caf50;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .input-group label {
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .input-group input,
+      .input-group select {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .input-group input:focus,
+      .input-group select:focus {
+        border-color: #4caf50;
+        outline: none;
+      }
+
+      .button-group {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+
+      .btn {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .btn.save {
+        background-color: #4caf50;
+      }
+
+      .btn.save:hover {
+        background-color: #45a049;
+      }
+
+      .btn.cancel {
+        background-color: #f44336;
+      }
+
+      .btn.cancel:hover {
+        background-color: #e53935;
+      }
+
+      .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      .form-row .input-group {
+        flex: 1;
+        margin-right: 10px;
+      }
+
+      .form-row .input-group:last-child {
+        margin-right: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="modal">
+      <div class="modal-content">
+        <h2>Thêm Nhà Cung Cấp</h2>
+        <div class="form-row">
+          <div class="input-group">
+            <label for="maNCC">Mã nhà cung cấp</label>
+            <input type="text" id="maNCC" placeholder="Mã mặc định" />
+          </div>
+          <div class="input-group">
+            <label for="tenNCC">Tên nhà cung cấp</label>
+            <input type="text" id="tenNCC" placeholder="Tên nhà cung cấp" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label for="dienThoai">Điện thoại</label>
+            <input type="text" id="dienThoai" placeholder="Điện thoại" />
+          </div>
+          <div class="input-group">
+            <label for="chiNhanh">Chi nhánh</label>
+            <input type="text" id="chiNhanh" placeholder="Chi nhánh" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" placeholder="Email" />
+          </div>
+          <div class="input-group">
+            <label for="khuVuc">Khu vực</label>
+            <select id="khuVuc">
+              <option>Chọn Tỉnh/TP</option>
+              <option>Hà Nội</option>
+              <option>TP.Hồ Chí Minh</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label for="diaChi">Địa chỉ</label>
+            <input type="text" id="diaChi" placeholder="Địa chỉ" />
+          </div>
+          <div class="input-group">
+            <label for="phuongXa">Phường/Xã</label>
+            <input type="text" id="phuongXa" placeholder="Phường/Xã" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="input-group">
+            <label for="maSoThue">Mã số thuế</label>
+            <input type="text" id="maSoThue" placeholder="Mã số thuế" />
+          </div>
+          <div class="input-group">
+            <label for="nhomNCC">Nhóm NCC</label>
+            <input type="text" id="nhomNCC" placeholder="Nhóm NCC" />
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="ghiChu">Ghi chú</label>
+          <input type="text" id="ghiChu" placeholder="Ghi chú" />
+        </div>
+        <div class="button-group">
+          <button class="btn save" onclick="save()">Lưu (F9)</button>
+          <button
+            class="btn cancel"
+            onclick="window.location.href='nhacungcap.html';"
+          >
+            Bỏ qua
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function save() {
+        const maNCC = document.getElementById("maNCC").value;
+        const tenNCC = document.getElementById("tenNCC").value;
+        const dienThoai = document.getElementById("dienThoai").value;
+        const email = document.getElementById("email").value;
+        const diaChi = document.getElementById("diaChi").value;
+        const khuVuc = document.getElementById("khuVuc").value;
+        const phuongXa = document.getElementById("phuongXa").value;
+        const maSoThue = document.getElementById("maSoThue").value;
+        const nhomNCC = document.getElementById("nhomNCC").value;
+        const ghiChu = document.getElementById("ghiChu").value;
+
+        // Kiểm tra nếu có dữ liệu trống
+        if (!maNCC || !tenNCC || !dienThoai || !email || !diaChi) {
+          alert("Vui lòng điền đầy đủ thông tin.");
+          return;
+        }
+
+        // Lưu dữ liệu ở đây (ví dụ: gửi đến server hoặc lưu vào localStorage)
+        alert("Dữ liệu đã được lưu thành công!");
+
+        // Đóng modal và trở về trang nhacungcap.html
+        window.location.href = "nhacungcap.html";
+      }
+
+      // Lắng nghe sự kiện phím nhấn
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "F9") {
+          event.preventDefault(); // Ngăn chặn hành vi mặc định
+          save(); // Gọi hàm lưu
+        }
+      });
+    </script>
+  </body>
+</html>

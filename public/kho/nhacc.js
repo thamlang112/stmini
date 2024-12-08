@@ -65,6 +65,31 @@ window.onclick = function (event) {
   }
 };
 
+// // Cập nhật hiển thị các cột dựa trên checkbox
+// document.querySelectorAll(".column-toggle").forEach((checkbox) => {
+//   checkbox.addEventListener("change", function () {
+//     const columnIndex = this.getAttribute("data-column");
+//     const tableRows = document.querySelectorAll("#nccTableBody tr");
+
+//     tableRows.forEach((row) => {
+//       const cell = row.cells[columnIndex];
+//       if (this.checked) {
+//         cell.classList.remove("hidden"); // Hiện cell
+//       } else {
+//         cell.classList.add("hidden"); // Ẩn cell
+//       }
+//     });
+//     // Cập nhật tiêu đề cột
+//     const headerCell =
+//       document.querySelectorAll("#nccTable thead th")[columnIndex];
+//     if (this.checked) {
+//       headerCell.classList.remove("hidden");
+//     } else {
+//       headerCell.classList.add("hidden");
+//     }
+//   });
+// });
+
 // Cập nhật hiển thị các cột dựa trên checkbox
 document.querySelectorAll(".column-toggle").forEach((checkbox) => {
   checkbox.addEventListener("change", function () {
@@ -79,13 +104,35 @@ document.querySelectorAll(".column-toggle").forEach((checkbox) => {
         cell.classList.add("hidden"); // Ẩn cell
       }
     });
+
     // Cập nhật tiêu đề cột
-    const headerCell =
-      document.querySelectorAll("#nccTable thead th")[columnIndex];
+    const headerCell = document.querySelectorAll("thead th")[columnIndex];
     if (this.checked) {
       headerCell.classList.remove("hidden");
     } else {
       headerCell.classList.add("hidden");
     }
   });
+});
+
+// Chọn tất cả checkbox
+document.getElementById("selectAll").addEventListener("change", function () {
+  const checkboxes = document.querySelectorAll(
+    '#nccTableBody input[type="checkbox"]'
+  );
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = this.checked;
+  });
+});
+
+// Xử lý sự kiện khi nhấn nút Xuất File
+document.getElementById("xuatFile").addEventListener("click", function () {
+  const confirmation = confirm("Bạn có đồng ý tải file Excel không?");
+  if (confirmation) {
+    // Thay thế URL bên dưới bằng đường dẫn đến file Excel của bạn
+    const fileUrl = "path/to/your/file.xlsx"; // Đường dẫn đến file Excel
+    window.location.href = fileUrl; // Chuyển hướng để tải file
+  } else {
+    alert("Hủy tải file.");
+  }
 });

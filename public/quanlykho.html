@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quản Lý Hàng Hóa</title>
+    <title>Quản Lý Kho Hàng</title>
     <link rel="stylesheet" href="kho.css" />
-    <script>
-      function navigateTo(page) {
-        window.location.href = page + ".html";
-      }
-    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
   </head>
   <body>
-    <div class="sidebar">
+    <div class="navbar">
       <h1>Quản Lý Kho Hàng</h1>
       <ul>
         <li>
@@ -42,127 +43,396 @@
         </li>
       </ul>
     </div>
+
     <div class="container">
-      <h1>HÀNG HÓA</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>STT</th>
-            <th>Mã HH</th>
-            <th>Xuất Xứ</th>
-            <th>ĐVT</th>
-            <th>Tên HH</th>
-            <th>Giá Nhập</th>
-            <th>Nhà CC</th>
-            <th>Số Lượng</th>
-            <th>NH</th>
-            <th>Giá Bán</th>
-            <th>Mã Vạch</th>
-            <th>Trạng Thái</th>
-            <th>Thuế VAT</th>
-          </tr>
-        </thead>
-        <tbody id="productTableBody">
-          <!-- Dữ liệu hàng hóa sẽ được hiển thị ở đây -->
-        </tbody>
-      </table>
+      <div class="left-panel">
+        <div class="section">
+          <h3>Loại hàng</h3>
+          <label><input type="checkbox" /> Hàng hóa</label>
+          <label><input type="checkbox" /> Dịch vụ</label>
+          <label><input type="checkbox" /> Combo - Đóng gói</label>
+        </div>
+        <div class="section">
+          <h3>Nhóm hàng</h3>
+          <label><input type="checkbox" /> Tất cả</label>
+          <label><input type="checkbox" /> Thực phẩm</label>
+          <label><input type="checkbox" /> Sữa</label>
+          <label><input type="checkbox" /> Nước ngọt</label>
+          <label><input type="checkbox" /> Kẹo bánh</label>
+          <label><input type="checkbox" /> Đồ uống có cồn</label>
+        </div>
+        <div class="section">
+          <h3>Tồn kho</h3>
+          <label><input type="checkbox" /> Tất cả</label>
+          <label><input type="checkbox" /> Dưới định mức tồn</label>
+          <label><input type="checkbox" /> Hết hàng</label>
+          <label><input type="checkbox" /> Hàng ít trong kho</label>
+        </div>
+        <div class="section">
+          <h3>Bán trực tiếp</h3>
+          <label><input type="checkbox" /> Tất cả</label>
+          <label><input type="checkbox" /> Được bán trực tiếp</label>
+          <label><input type="checkbox" /> Không được bán trực tiếp</label>
+        </div>
+        <div class="section">
+          <h3>Thời gian tạo</h3>
+          <select id="timeSelect" onchange="toggleDatePickers()">
+            <option value="today">Hôm nay</option>
+            <option value="this_week">Tuần này</option>
+            <option value="custom">Lựa chọn khác</option>
+          </select>
+          <div id="timePickers" class="date-pickers">
+            <h3>Từ ngày:</h3>
+            <input type="text" id="startDate" placeholder="Chọn ngày bắt đầu" />
+            <h3>Đến ngày:</h3>
+            <input type="text" id="endDate" placeholder="Chọn ngày kết thúc" />
+          </div>
+        </div>
+        <div class="section">
+          <h3>Ngày dự kiến hết hàng</h3>
+          <select id="expirySelect" onchange="toggleExpiryDatePickers()">
+            <option value="today">Hôm nay</option>
+            <option value="custom">Lựa chọn khác</option>
+          </select>
+          <div id="expiryPickers" class="date-pickers">
+            <h3>Từ ngày:</h3>
+            <input
+              type="text"
+              id="expiryStartDate"
+              placeholder="Chọn ngày bắt đầu"
+            />
+            <h3>Đến ngày:</h3>
+            <input
+              type="text"
+              id="expiryEndDate"
+              placeholder="Chọn ngày kết thúc"
+            />
+          </div>
+        </div>
+        <div class="section">
+          <h3>Nhà cung cấp</h3>
+          <div class="sub-section">
+            <select>
+              <option value="">Chọn nhà cung cấp</option>
+              <option value="ncc1">Nhà Cung Cấp 1</option>
+              <option value="ncc2">Nhà Cung Cấp 2</option>
+              <option value="ncc3">Nhà Cung Cấp 3</option>
+            </select>
+          </div>
+        </div>
+        <div class="section">
+          <h3>Vị trí</h3>
+          <div class="sub-section">
+            <select>
+              <option value="">Chọn vị trí</option>
+              <option value="vt1">Vị Trí 1</option>
+              <option value="vt2">Vị Trí 2</option>
+              <option value="vt3">Vị Trí 3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <h1>HÀNG HÓA</h1>
+        <div class="search-bar">
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Tìm kiếm theo mã, tên hàng..."
+            oninput="searchProducts()"
+          />
+          <!--<span class="toggle-button" onclick="toggleSearchFields()">▼</span>-->
+          <div class="dropdowns">
+            <button class="dropbtn" onclick="showDropdown()">Thêm mới</button>
+            <div id="addDropdown" class="dropdowns-content">
+              <a href="#" onclick="navigateToAddPage('kho/nhaphang')"
+                >Thêm hàng hóa</a
+              >
+              <a href="#" onclick="navigateToAddPage('kho/themdichvu')"
+                >Thêm dịch vụ</a
+              >
+              <a href="#" onclick="navigateToAddPage('kho/themcombo')"
+                >Thêm Combo - đồng gói</a
+              >
+            </div>
+          </div>
+          <button onclick="openModal()">Import</button>
+
+          <div id="myModal" class="modal">
+            <div class="modal-content">
+              <h2>Chọn cách thêm hàng hóa</h2>
+              <button onclick="importFromExcel()">Nhập từ Excel</button>
+              <button onclick="suggestedList()">Chọn từ danh sách gợi ý</button>
+              <button onclick="closeModal()">Đóng</button>
+            </div>
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            style="display: none"
+            accept=".xls,.xlsx"
+            onchange="handleFile(event)"
+          />
+          <div id="suggestionList">
+            <h3>Sản phẩm gợi ý</h3>
+            <ul id="productList"></ul>
+          </div>
+          <button class="button" onclick="exportToExcel()">Xuất file</button>
+          <div class="dropdown">
+            <button class="btn">Thư Mục</button>
+            <div class="dropdown-content" id="dropdownContent">
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="0"
+                  checked
+                />
+                Hình Ảnh</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="1"
+                  checked
+                />
+                Mã Hàng</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="2"
+                  checked
+                />
+                Mã Vạch</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="3"
+                  checked
+                />
+                Tên hàng</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="4"
+                  checked
+                />
+                Nhóm Hàng</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="5"
+                  checked
+                />
+                Loại Hàng</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="6"
+                  checked
+                />
+                Liên Kết Kênh Bán</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="7"
+                  checked
+                />
+                Gía Bán</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="8"
+                  checked
+                />
+                Gía Vốn</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="9"
+                  checked
+                />
+                Thương Hiệu</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="10"
+                  checked
+                />
+                Tồn Kho</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="11"
+                  checked
+                />
+                Vị Trí</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="12"
+                  checked
+                />
+                Khách Đặt</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="13"
+                  checked
+                />
+                Thời Gian Tạo</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="14"
+                  checked
+                />
+                Dự Kiến Hết Hàng</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="15"
+                  checked
+                />
+                Định Mức Tốn Ít Nhất</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="16"
+                  checked
+                />
+                Định Mức Tốn Nhiều Nhất</label
+              >
+              <label
+                ><input
+                  type="checkbox"
+                  class="column-toggle"
+                  data-column="17"
+                  checked
+                />
+                Trạng Thái</label
+              >
+            </div>
+          </div>
+          <div id="productTable">
+            <!-- Bảng hàng hóa sẽ được tạo động ở đây -->
+          </div>
+        </div>
+        <table class="product-table">
+          <thead>
+            <tr>
+              <th>Hình ảnh</th>
+              <th>Mã hàng</th>
+              <th>Tên hàng</th>
+              <th>Giá bán</th>
+              <th>Giá vốn</th>
+              <th>Tồn kho</th>
+              <th>Khách đặt</th>
+              <th>Thời gian tạo</th>
+              <th>Dự kiến hết hàng</th>
+            </tr>
+          </thead>
+          <tbody id="productTableBody">
+            <tr>
+              <td>
+                <img
+                  src="https://cdn-app.kiotviet.vn/sample/retail/25.jpg"
+                  alt="Hình ảnh sản phẩm"
+                />
+              </td>
+              <td>SP00025</td>
+              <td>Hộp phở đỗ</td>
+              <td>10,000</td>
+              <td>8,000</td>
+              <td>194</td>
+              <td>0</td>
+              <td>12/12/2024</td>
+              <td>15/12/2024</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="https://uaryypadx2obj.vcdn.cloud/kvimg/8936048470685_original.jpg"
+                  alt="Hình ảnh sản phẩm"
+                />
+              </td>
+              <td>SP00026</td>
+              <td>Mì bò hầm chua Reeva 100g</td>
+              <td>15,000</td>
+              <td>10,000</td>
+              <td>50</td>
+              <td>5</td>
+              <td>10/12/2024</td>
+              <td>20/12/2024</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="https://uaryypadx2obj.vcdn.cloud/kvimg/8936067700077_original.jpg"
+                  alt="Hình ảnh sản phẩm"
+                />
+              </td>
+              <td>SP00027</td>
+              <td>Thịt bò Nhật Bản</td>
+              <td>450,000</td>
+              <td>400,000</td>
+              <td>20</td>
+              <td>2</td>
+              <td>01/12/2024</td>
+              <td>10/12/2024</td>
+            </tr>
+            <tr>
+              <td>
+                <img
+                  src="https://uaryypadx2obj.vcdn.cloud/kvimg/5000299611258_original.jpg"
+                  alt="Hình ảnh sản phẩm"
+                />
+              </td>
+              <td>SP00028</td>
+              <td>Rượu Chivas Regal 12</td>
+              <td>1,200,000</td>
+              <td>1,000,000</td>
+              <td>10</td>
+              <td>3</td>
+              <td>15/11/2024</td>
+              <td>15/01/2025</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-
-    <script>
-      function loadProducts() {
-        let products = JSON.parse(localStorage.getItem("products")) || [];
-        const tbody = document.getElementById("productTableBody");
-        tbody.innerHTML = ""; // Xóa nội dung cũ
-
-        // Khởi tạo dữ liệu mẫu nếu chưa có sản phẩm
-        if (products.length === 0) {
-          const defaultProducts = [
-            {
-              maHH: "HH001",
-              xuatxu: "Việt Nam",
-              dvt: "Cái",
-              tenHH: "Sữa",
-              giaNhap: 8000,
-              nhaCC: "Vinamill",
-              soLuong: 100,
-              nh: "NH1",
-              giaBan: 12000,
-              maVach: "1234567890123",
-              trangThai: "Còn hàng",
-              thueVAT: "10%",
-            },
-            {
-              maHH: "HH002",
-              xuatxu: "Hàn Quốc",
-              dvt: "Hộp",
-              tenHH: "Cafe",
-              giaNhap: 15000,
-              nhaCC: "Minh Chiến",
-              soLuong: 50,
-              nh: "NH2",
-              giaBan: 25000,
-              maVach: "1234567890124",
-              trangThai: "Còn hàng",
-              thueVAT: "10%",
-            },
-            {
-              maHH: "HH003",
-              xuatxu: "Trung Quốc",
-              dvt: "Cái",
-              tenHH: "Kẹo Mút",
-              giaNhap: 5000,
-              nhaCC: "Chuppa Chups",
-              soLuong: 200,
-              nh: "NH3",
-              giaBan: 8000,
-              maVach: "1234567890125",
-              trangThai: "Còn hàng",
-              thueVAT: "10%",
-            },
-            {
-              maHH: "HH004",
-              xuatxu: "Nhật Bản",
-              dvt: "Gói",
-              tenHH: "Mì tôm",
-              giaNhap: 20000,
-              nhaCC: "Omachi",
-              soLuong: 30,
-              nh: "NH4",
-              giaBan: 35000,
-              maVach: "1234567890126",
-              trangThai: "Còn hàng",
-              thueVAT: "10%",
-            },
-          ];
-          localStorage.setItem("products", JSON.stringify(defaultProducts));
-          products = defaultProducts; // Cập nhật lại danh sách sản phẩm
-        }
-
-        products.forEach((product, index) => {
-          const newRow = document.createElement("tr");
-          newRow.innerHTML = `
-                  <td>${index + 1}</td>
-                  <td>${product.maHH}</td>
-                  <td>${product.xuatxu}</td>
-                  <td>${product.dvt}</td>
-                  <td>${product.tenHH}</td>
-                  <td>${product.giaNhap}</td>
-                  <td>${product.nhaCC}</td>
-                  <td>${product.soLuong}</td>
-                  <td>${product.nh}</td>
-                  <td>${product.giaBan}</td>
-                  <td>${product.maVach}</td>
-                  <td>${product.trangThai}</td>
-                  <td>${product.thueVAT}</td>
-              `;
-          tbody.appendChild(newRow);
-        });
-      }
-
-      // Gọi hàm loadProducts khi trang được tải
-      window.onload = function () {
-        loadProducts();
-      };
-    </script>
+    <script src="kho.js"></script>
   </body>
 </html>

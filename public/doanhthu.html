@@ -3,98 +3,235 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="doanhthu.css" />
-    <title>Báo Cáo Doanh Thu</title>
+    <title>Doanh Thu</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background-color: #f4f4f4;
+      }
+      .container {
+        max-width: 1200px; /* Tăng chiều rộng khung chính */
+        margin: auto;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+      }
+      .box1 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .card {
+        flex: 1;
+        margin: 10px;
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        color: white;
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 32px;
+      }
+      .card p {
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      .revenue {
+        background-color: #007bff;
+      }
+      .returns {
+        background-color: #fd7e14;
+      }
+      .inventory {
+        background-color: #dc3545;
+      }
+      .icon {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 40px;
+      }
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      .box {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: #fff;
+      }
+      .chart {
+        width: 100%;
+        height: 300px;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
-
   <body>
     <div class="container">
-      <h1>Doanh Thu</h1>
-      <canvas id="doanhthuChart" width="400" height="200"></canvas>
-      <div class="summary">
-        <div class="box">
-          <h2>Tổng Doanh Thu</h2>
-          <p id="tongDoanhThu">0 VNĐ</p>
+      <div class="box1">
+        <div class="card revenue">
+          <i class="icon">💰</i>
+          <h3>0</h3>
+          <p>Doanh thu</p>
         </div>
-        <div class="box">
-          <h2>Tổng Đơn Hàng</h2>
-          <p id="tongDonHang">0</p>
+        <div class="card returns">
+          <i class="icon">📦</i>
+          <h3>0</h3>
+          <p>Trả hàng</p>
         </div>
-        <div class="box">
-          <h2>Sản Phẩm Trong Kho</h2>
-          <p id="sanPhamKho">0</p>
+        <div class="card inventory">
+          <i class="icon">📉</i>
+          <h3 class="negative">-9.056</h3>
+          <p>Số còn lại trong kho</p>
         </div>
+      </div>
+
+      <div class="box">
+        <h2>Doanh thu thuần tháng này</h2>
+        <canvas id="monthlyRevenueChart" class="chart"></canvas>
+        <p style="text-align: center">Doanh thu thuần: 1.278.000 VNĐ</p>
+      </div>
+
+      <div class="box">
+        <h2>Top 10 Hàng Hóa Bán Chạy Tháng Này</h2>
+        <canvas id="topProductsChart" class="chart"></canvas>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      function calculateRevenue() {
-        const totalRevenue =
-          JSON.parse(localStorage.getItem("totalRevenue")) || 0;
-        const totalOrders =
-          JSON.parse(localStorage.getItem("totalOrders")) || 0;
-        const products = JSON.parse(localStorage.getItem("products")) || [];
-        let totalStock = 0;
+      const monthlyRevenueCtx = document
+        .getElementById("monthlyRevenueChart")
+        .getContext("2d");
 
-        products.forEach((product) => {
-          totalStock += product.soLuong; // Tổng số sản phẩm trong kho
-        });
-
-        document.getElementById("tongDoanhThu").textContent =
-          totalRevenue + " VNĐ";
-        document.getElementById("tongDonHang").textContent = totalOrders;
-        document.getElementById("sanPhamKho").textContent = totalStock;
-      }
-
-      function renderChart() {
-        const products = JSON.parse(localStorage.getItem("products")) || [];
-        const salesData = {};
-
-        products.forEach((product) => {
-          if (!salesData[product.tenHH]) {
-            salesData[product.tenHH] = 0;
-          }
-          salesData[product.tenHH] += product.giaBan * product.soLuong; // Tính tổng doanh thu của từng sản phẩm
-        });
-
-        const labels = Object.keys(salesData);
-        const data = Object.values(salesData);
-
-        const ctx = document.getElementById("doanhthuChart").getContext("2d");
-        const doanhthuChart = new Chart(ctx, {
-          type: "bar",
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Doanh Thu",
-                data: data,
-                backgroundColor: "rgba(75, 192, 192, 0.6)",
-                borderColor: "rgba(75, 192, 192, 1)",
-                borderWidth: 1,
-              },
-            ],
+      const monthlyRevenueChart = new Chart(monthlyRevenueCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "01",
+            "02",
+            "03",
+            "04",
+            "05",
+            "06",
+            "07",
+            "08",
+            "09",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24",
+            "25",
+            "26",
+            "27",
+            "28",
+            "29",
+            "30",
+            "31",
+          ],
+          datasets: [
+            {
+              label: "Doanh thu thuần tháng này (VNĐ)",
+              data: [
+                720000, 500000, 400000, 600000, 250000, 300000, 700000, 800000,
+                200000, 300000, 500000, 400000, 600000, 700000, 800000, 900000,
+                200000, 300000, 100000, 500000, 600000, 200000, 300000, 400000,
+                500000, 600000, 200000, 300000, 400000, 500000, 600000, 700000,
+              ],
+              backgroundColor: "rgba(0, 123, 255, 0.5)",
+              borderColor: "rgba(0, 123, 255, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
           },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "top",
-              },
+        },
+      });
+
+      const topProductsCtx = document
+        .getElementById("topProductsChart")
+        .getContext("2d");
+
+      const topProductsChart = new Chart(topProductsCtx, {
+        type: "bar",
+        data: {
+          labels: [
+            "Sữa tắm Pandomine xanh lá",
+            "Coca cola 350ml",
+            "Sản phẩm C",
+            "Sản phẩm D",
+            "Sản phẩm E",
+            "Sản phẩm F",
+            "Sản phẩm G",
+            "Sản phẩm H",
+            "Sản phẩm I",
+            "Sản phẩm J",
+          ],
+          datasets: [
+            {
+              label: "Số lượng bán (sản phẩm)",
+              data: [
+                700000, 300000, 200000, 150000, 100000, 80000, 60000, 40000,
+                20000, 10000,
+              ],
+              backgroundColor: "rgba(0, 123, 255, 1)",
+              borderWidth: 1,
+            },
+          ],
+        },
+        options: {
+          indexAxis: "y",
+          scales: {
+            x: {
+              beginAtZero: true,
               title: {
                 display: true,
-                text: "Doanh Thu Theo Sản Phẩm",
+                text: "Số lượng bán",
+              },
+            },
+            y: {
+              title: {
+                display: true,
+                text: "Sản phẩm",
               },
             },
           },
-        });
-      }
-
-      window.onload = function () {
-        calculateRevenue();
-        renderChart();
-      };
+          plugins: {
+            legend: {
+              display: false,
+            },
+            title: {
+              display: true,
+              text: "Top 10 Hàng Hóa Bán Chạy Tháng Này",
+            },
+          },
+        },
+      });
     </script>
   </body>
 </html>

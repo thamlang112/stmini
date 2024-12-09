@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm Dịch Vụ</title>
+    <link rel="stylesheet" href="kho.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+      .row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .box {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        flex: 0 0 48%; /* Chiếm 48% chiều rộng */
+      }
+      .full-width {
+        flex: 0 0 100%; /* Chiếm toàn bộ chiều rộng */
+      }
+      .form-group {
+        margin-bottom: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input[type="text"],
+      input[type="number"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+      }
+      .button-group {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+      }
+      .button-group button#saveBtn {
+        background-color: #ffc107; /* Vàng cho nút Thêm sản phẩm */
+      }
+      .button-group button#saveAndaddBtn {
+        background-color: #28a745; /* Xanh lá cho nút Lưu & In */
+      }
+      .button-group button#saveAndEditBtn {
+        background-color: #007bff; /* Xanh dương cho nút Lưu */
+      }
+      .button-group button#cancelBtn {
+        background-color: #dc3545; /* Đỏ cho nút Hủy */
+      }
+      button {
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <h1>Thêm Combo - Đóng Gói</h1>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="box">
+          <div class="form-group">
+            <label for="maHang">Mã Hàng:</label>
+            <input type="text" id="maHang" required />
+          </div>
+          <div class="form-group">
+            <label for="maVach">Mã Vạch:</label>
+            <input type="text" id="maVach" required />
+          </div>
+          <div class="form-group">
+            <label for="tenHang">Tên Hàng:</label>
+            <input type="text" id="tenHang" required />
+          </div>
+          <div class="form-group">
+            <label for="nhomHang">Nhóm Hàng:</label>
+            <select id="nhomHang">
+              <option value="">--- Lựa chọn ---</option>
+              <!-- Thêm các tùy chọn ở đây -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="thuongHieu">Thương Hiệu:</label>
+            <select id="thuongHieu">
+              <option value="">--- Chọn thương hiệu ---</option>
+              <!-- Thêm các tùy chọn ở đây -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="hinhAnh">Tải Ảnh Lên:</label>
+            <input type="file" id="hinhAnh" accept="image/*" multiple />
+          </div>
+        </div>
+        <div class="box">
+          <div class="form-group">
+            <label for="giaVon">Giá Vốn:</label>
+            <input type="number" id="giaVon" required />
+          </div>
+          <div class="form-group">
+            <label for="giaBan">Giá Bán:</label>
+            <input type="number" id="giaBan" required />
+          </div>
+          <div class="form-group">
+            <label for="banTrucTiep">Bán Trực Tiếp:</label>
+            <input type="checkbox" id="banTrucTiep" />
+          </div>
+        </div>
+      </div>
+      <div class="box full-width">
+        <div class="form-group">
+          <label for="donViTinh">Đơn Vị Tính:</label>
+          <input type="text" id="donViTinh" />
+        </div>
+        <div class="form-group">
+          <label for="moTa">Mô Tả Chi Tiết:</label>
+          <textarea id="moTa" rows="4"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="button-group">
+      <button type="submit" onclick="saveData()" id="saveBtn">Lưu</button>
+      <button type="button" onclick="saveAndAddMore()" id="saveAndaddBtn">
+        Lưu & Thêm nữa
+      </button>
+      <button type="button" onclick="saveAndEdit()" id="saveAndEditBtn">
+        Lưu & Sao chép
+      </button>
+      <button type="button" onclick="cancel()" id="cancelBtn">Hủy bỏ</button>
+    </div>
+    <script>
+      function saveData() {
+        // Lưu dữ liệu vào file quanlykho.html (sử dụng AJAX hoặc fetch trong thực tế)
+        alert("Dữ liệu đã được lưu vào quanlykho.html.");
+        // Thực hiện lưu dữ liệu ở đây
+      }
+
+      function saveAndAddMore() {
+        // Lưu dữ liệu vào file và làm trống các trường để thêm mới
+        alert("Dữ liệu đã được lưu. Bạn có thể thêm nữa.");
+        clearFields();
+      }
+
+      function saveAndEdit() {
+        // Lưu dữ liệu và sao chép lại thông tin
+        alert("Dữ liệu đã được lưu và sao chép.");
+        // Thực hiện lưu dữ liệu và sao chép ở đây
+      }
+
+      //   function cancel() {
+      //     // Quay lại file quanlykho.html
+      //     alert("Hủy bỏ và quay lại quanlykho.html.");
+      //     // Chuyển hướng đến quanlykho.html (cần URL thực tế)
+      //     window.location.href = "quanlykho.html";
+      //   }
+
+      function clearFields() {
+        document.getElementById("maHang").value = "";
+        document.getElementById("maVach").value = "";
+        document.getElementById("tenHang").value = "";
+        document.getElementById("nhomHang").selectedIndex = 0;
+        document.getElementById("thuongHieu").selectedIndex = 0;
+        document.getElementById("hinhAnh").value = "";
+        document.getElementById("giaVon").value = "";
+        document.getElementById("giaBan").value = "";
+        document.getElementById("banTrucTiep").checked = false;
+        document.getElementById("donViTinh").value = "";
+        document.getElementById("moTa").value = "";
+      }
+      function saveData() {
+        // Lấy dữ liệu từ các trường nhập liệu
+        const maHang = document.getElementById("maHang").value;
+        const maVach = document.getElementById("maVach").value;
+        const tenHang = document.getElementById("tenHang").value;
+        const nhomHang = document.getElementById("nhomHang").value;
+        const thuongHieu = document.getElementById("thuongHieu").value;
+        const giaVon = document.getElementById("giaVon").value;
+        const giaBan = document.getElementById("giaBan").value;
+        const banTrucTiep = document.getElementById("banTrucTiep").checked;
+        const donViTinh = document.getElementById("donViTinh").value;
+        const moTa = document.getElementById("moTa").value;
+
+        // Tạo đối tượng sản phẩm
+        const newProduct = {
+          maHH: maHang,
+          maVach: maVach,
+          tenHH: tenHang,
+          nhomHang: nhomHang,
+          thuongHieu: thuongHieu,
+          giaVon: parseFloat(giaVon),
+          giaBan: parseFloat(giaBan),
+          banTrucTiep: banTrucTiep,
+          donViTinh: donViTinh,
+          moTa: moTa,
+          trangThai: "Còn hàng", // Mặc định trạng thái
+          thueVAT: "10%", // Mặc định thuế VAT
+        };
+
+        // Lưu vào localStorage
+        let products = JSON.parse(localStorage.getItem("products")) || [];
+        products.push(newProduct);
+        localStorage.setItem("products", JSON.stringify(products));
+
+        alert("Dữ liệu đã được lưu vào danh sách sản phẩm.");
+      }
+
+      function cancel() {
+        alert("Hủy bỏ và quay lại quanlykho.html.");
+        window.location.href = "kho/quanlykho.html";
+      }
+    </script>
+  </body>
+</html>

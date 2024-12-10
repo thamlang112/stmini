@@ -249,3 +249,63 @@ button {
   width: 50px; /* Điều chỉnh kích thước hình ảnh */
   height: auto;
 }
+img {
+  max-width: 100px;
+  height: auto;
+}
+.product-info {
+  display: none; /* Ẩn thông tin sản phẩm mặc định */
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 20px 0;
+}
+.product-detail {
+  background-color: #f9f9f9; /* Màu nền cho ô thông tin sản phẩm */
+  padding: 30px; /* Khoảng cách bên trong ô */
+  border: 1px solid #ccc; /* Đường viền */
+}
+
+.button-group {
+  margin-top: 10px;
+}
+
+.button-group button {
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.btn-update {
+  background-color: #28a745; /* Màu xanh lá cho nút Cập nhật */
+}
+
+.btn-print {
+  background-color: #6c757d; /* Màu xám cho nút In tem mã */
+}
+
+.btn-copy {
+  background-color: #007bff; /* Màu xanh dương cho nút Sao chép */
+}
+
+.btn-disable {
+  background-color: #dc3545; /* Màu đỏ cho nút Ngừng kinh doanh */
+}
+
+.btn-delete {
+  background-color: #c82333; /* Màu đỏ đậm cho nút Xóa */
+}
+
+.btn-import {
+  background-color: #fd7e14; /* Màu cam cho nút Nhập hàng */
+}
+
+.btn-close {
+  background-color: #f8f9fa; /* Màu xám nhạt cho nút Đóng */
+  color: black; /* Màu chữ cho nút Đóng */
+}

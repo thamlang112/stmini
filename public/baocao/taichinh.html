@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Báo cáo tài chính</title>
+  <link rel="stylesheet" href="taichinh.css">
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <h2>Báo cáo nhân viên</h2>
+            <div class="box">
+                <h3>Kiểu hiển thị</h3>
+                <label><input type="radio" name="display" checked> Biểu đồ</label>
+                <label><input type="radio" name="display"> Báo cáo</label>
+            </div>
+            <div class="box">
+                <h3>Thời gian</h3>
+                <select>
+                    <option>2024</option>
+                </select>
+                <label><input type="radio" name="time" checked> Theo Tháng</label>
+                <label><input type="radio" name="time"> Theo Quý</label>
+                <label><input type="radio" name="time"> Theo Năm</label>
+            </div>
+    </div>
+    <div class="content">
+        <div class="header">
+            <h1>Báo cáo kết quả hoạt động kinh doanh</h1>
+            <p>Chi nhánh trung tâm</p>
+          </div>
+      <div class="controls">
+        <span>Ngày lập: 10/12/2024 20:27</span>
+        <div>
+          <button>◀</button>
+          <button>1</button>
+          <button>▶</button>
+        </div>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>T12.2024</th>
+            <th>T11.2024</th>
+            <th>T10.2024</th>
+            <th>Tổng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Doanh thu bán hàng (1)</td>
+            <td>4,248,000</td>
+            <td>10,456,000</td>
+            <td>1,888,000</td>
+            <td>16,592,000</td>
+          </tr>
+          <tr>
+            <td>Giảm trừ doanh thu (2)</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>Doanh thu thuần (3=1-2)</td>
+            <td>4,248,000</td>
+            <td>10,456,000</td>
+            <td>1,888,000</td>
+            <td>16,592,000</td>
+          </tr>
+          <tr>
+            <td>Giá vốn hàng bán (4)</td>
+            <td>3,580,000</td>
+            <td>8,817,000</td>
+            <td>1,600,000</td>
+            <td>13,997,000</td>
+          </tr>
+          <tr>
+            <td>Lợi nhuận gộp (5=3-4)</td>
+            <td>668,000</td>
+            <td>1,639,000</td>
+            <td>288,000</td>
+            <td>2,595,000</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer">
+      <p>Chi nhánh trung tâm</p>
+    </div>
+  </div>
+</body>
+</html>

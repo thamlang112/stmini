@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo kênh bán hàng</title>
+    <link rel="stylesheet" href="kenhbanhang.css">
+    <script defer src="kenhbanhang.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h3>Báo cáo kênh bán hàng</h3>
+            <div class="option">
+                <label for="viewType">Kiểu hiển thị</label>
+                <select id="viewType">
+                    <option>Biểu đồ</option>
+                    <option>Báo cáo</option>
+                </select>
+            </div>
+            <div class="option">
+                <label for="interest">Mối quan tâm</label>
+                <select id="interest">
+                    <option>Bán hàng</option>
+                    <option>Lợi nhuận</option>
+                    <option>Hàng bán theo kênh</option>
+                </select>
+            </div>
+            <div class="option">
+                <label for="time">Thời gian</label>
+                <select id="time" onchange="toggleDateInputs(this.value)">
+                    <option value="this_week">Tuần này</option>
+                    <option value="custom">Lựa chọn khác</option>
+                </select>
+                <div id="dateInputs" style="display: none; margin-top: 10px;">
+                    <label for="startDate">Từ ngày:</label>
+                    <input id="startDate" type="date">
+                    <label for="endDate">Đến ngày:</label>
+                    <input id="endDate" type="date">
+                </div>
+            </div>
+            <div class="option">
+                <label for="seller">Người bán</label>
+                <input id="seller" type="text" placeholder="Chọn người bán">
+            </div>
+            <div class="option">
+                <label for="channel">Kênh bán</label>
+                <input id="channel" type="text" placeholder="Chọn kênh bán">
+            </div>
+        </div>
+        <div class="content">
+            <h2>Doanh thu kênh bán hàng</h2>
+            <div class="chart-wrapper">
+                <div class="pie-chart">
+                    <div class="pie-slice slice1">
+                        <span class="label"></span>
+                    </div>
+                    <div class="pie-slice slice2">
+                        <span class="label"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="legend">
+                <div class="item" data-value="860k">
+                    <div class="color-box" style="background-color: #4a90e2;"></div>
+                    <span>Bán trực tiếp: 860k</span>
+                </div>
+                <div class="item" data-value="260k">
+                    <div class="color-box" style="background-color: #50e3c2;"></div>
+                    <span>Bán online: 260k</span>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

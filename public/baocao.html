@@ -3,209 +3,522 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="baocao.css" />
-    <title>Báo Cáo</title>
+    <title>Báo cáo cuối ngày</title>
     <style>
       body {
-        background-color: pink; /* Màu nền hồng */
         font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .toolbar button {
+        padding: 10px 15px;
+        border: none;
+        background: #0056b3;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      .toolbar button:hover {
+        background: #004494;
       }
       .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px;
         display: flex;
-        flex-direction: column; /* Đặt hướng dọc cho container */
-        align-items: center; /* Căn giữa các phần tử */
+      }
+      .panel {
+        background: white;
         padding: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin: 0 5px;
+        flex: 1;
       }
-      .chart-container {
-        background-color: white; /* Nền trắng cho biểu đồ */
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 400px; /* Đặt chiều rộng cho các biểu đồ */
-        margin-bottom: 20px; /* Khoảng cách giữa các biểu đồ */
+      h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
       }
-      h2 {
-        text-align: center; /* Căn giữa tiêu đề */
+      label {
+        display: block;
+        margin: 10px 0 5px;
       }
-      .transaction-history {
-        background-color: white;
-        border-radius: 10px;
-        padding: 20px;
-        width: 80%; /* Đặt chiều rộng cho lịch sử giao dịch */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      input[type="radio"] {
+        margin-right: 10px;
       }
-      .transaction-history h3 {
-        text-align: center; /* Căn giữa tiêu đề lịch sử giao dịch */
+      select,
+      input[type="text"],
+      input[type="date"] {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
       }
-      .transaction-list {
-        list-style-type: none; /* Bỏ dấu chấm đầu dòng */
-        padding: 0; /* Bỏ padding */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
       }
-      .transaction-list li {
-        margin: 10px 0; /* Khoảng cách giữa các giao dịch */
-        padding: 10px;
-        border: 1px solid #ccc; /* Viền nhẹ cho từng giao dịch */
-        border-radius: 5px;
+      th,
+      td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      th {
+        background-color: #e7f3ff;
+      }
+      .report-section {
+        display: none;
       }
     </style>
   </head>
   <body>
+    <div class="toolbar">
+      <button onclick="location.href='baocao/banhang1.html'">Bán hàng</button>
+      <button onclick="location.href='baocao/hanghoa1.html'">Hàng hóa</button>
+      <button onclick="location.href='baocao/khachhang.html'">
+        Khách hàng
+      </button>
+      <button onclick="location.href='baocao/nhacungcap.html'">
+        Nhà cung cấp
+      </button>
+      <button onclick="location.href='baocao/nhanvien.html'">Nhân viên</button>
+      <button onclick="location.href='baocao/kenhbanhang.html'">
+        Kế hoạch bán hàng
+      </button>
+      <button onclick="location.href='baocao/taichinh.html'">Tài chính</button>
+    </div>
     <div class="container">
-      <div class="chart-container">
-        <h2>Sản Phẩm Bán Chạy</h2>
-        <canvas id="salesChart"></canvas>
+      <div class="panel">
+        <h1>Báo cáo cuối ngày</h1>
+        <form>
+          <label>Kiểu hiển thị:</label>
+          <input
+            type="radio"
+            name="display"
+            value="ngang"
+            onclick="toggleDisplay()"
+            checked
+          />
+          Ngang
+          <input
+            type="radio"
+            name="display"
+            value="doc"
+            onclick="toggleDisplay()"
+          />
+          Dọc
+
+          <div id="concerns" class="display-options">
+            <label>Mối quan tâm:</label>
+            <input
+              type="radio"
+              name="concern"
+              value="banhang"
+              onclick="toggleReport()"
+              checked
+            />
+            Bán hàng
+            <input
+              type="radio"
+              name="concern"
+              value="thuchi"
+              onclick="toggleReport()"
+            />
+            Thu chi
+            <input
+              type="radio"
+              name="concern"
+              value="hanghoa"
+              onclick="toggleReport()"
+            />
+            Hàng hóa
+            <input
+              type="radio"
+              name="concern"
+              value="tonghop"
+              onclick="toggleReport()"
+            />
+            Tổng hợp
+          </div>
+
+          <div id="time" class="display-options">
+            <label>Thời gian:</label>
+            <input type="date" name="start_time" onchange="filterTable()" />
+            <input type="date" name="end_time" onchange="filterTable()" />
+          </div>
+
+          <div id="customer" class="display-options">
+            <label>Khách hàng:</label>
+            <input
+              type="text"
+              id="searchCustomer"
+              onkeyup="filterTable()"
+              placeholder="Tìm kiếm theo mã hoặc tên..."
+            />
+          </div>
+
+          <div class="display-options">
+            <label>Nhân viên:</label>
+            <select id="searchEmployee" onchange="filterTable()">
+              <option value="">Chọn nhân viên...</option>
+              <option value="Nam - Kinh Doanh">Nam - Kinh Doanh</option>
+              <option value="Việt - Kế Toán">Việt - Kế Toán</option>
+              <option value="Quân - Quản Lý">Quân - Quản Lý</option>
+            </select>
+          </div>
+
+          <div class="display-options">
+            <label>Người tạo:</label>
+            <select id="searchCreator" onchange="filterTable()">
+              <option value="">Chọn người tạo...</option>
+              <option value="Nam - Kinh Doanh">Nam - Kinh Doanh</option>
+              <option value="Việt - Kế Toán">Việt - Kế Toán</option>
+              <option value="Quân - Quản Lý">Quân - Quản Lý</option>
+            </select>
+          </div>
+
+          <div class="display-options">
+            <label>Phương thức thanh toán:</label>
+            <select id="searchPayment" onchange="filterTable()">
+              <option value="">Chọn phương thức thanh toán...</option>
+              <option value="Tiền mặt">Tiền mặt</option>
+              <option value="Chuyển khoản">Chuyển khoản</option>
+              <option value="Thẻ tín dụng">Thẻ tín dụng</option>
+              <option value="Ví">Ví</option>
+            </select>
+          </div>
+
+          <div class="display-options">
+            <label>Phương thức bán hàng:</label>
+            <select id="searchSales" onchange="filterTable()">
+              <option value="">Chọn phương thức bán hàng...</option>
+              <option value="Trực tiếp">Trực tiếp</option>
+              <option value="Online">Online</option>
+            </select>
+          </div>
+        </form>
       </div>
-      <div class="chart-container">
-        <h2>Thống Kê Nhân Viên</h2>
-        <canvas id="employeeChart"></canvas>
-      </div>
-      <div class="transaction-history">
-        <h3>Lịch Sử Giao Dịch</h3>
-        <ul class="transaction-list" id="transactionList">
-          <!-- Danh sách giao dịch sẽ được hiển thị ở đây -->
-        </ul>
+
+      <div class="panel">
+        <h1>Báo cáo cuối ngày về bán hàng</h1>
+
+        <!-- Phần báo cáo bán hàng -->
+        <div id="banhangReport" class="report-section">
+          <h2>Báo cáo bán hàng</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Mã chứng từ</th>
+                <th>Khách hàng</th>
+                <th>Nhân viên</th>
+                <th>Thời gian</th>
+                <th>Thanh toán</th>
+                <th>Số lượng</th>
+                <th>Tổng tiền hàng</th>
+                <th>Giảm giá doanh thu</th>
+                <th>Thu khác</th>
+                <th>VAT</th>
+                <th>Phí trả hàng</th>
+                <th>Thực thu</th>
+                <th>Ghi nợ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>001</td>
+                <td>Khách 1</td>
+                <td>Nhân viên A</td>
+                <td>09/12/2024</td>
+                <td>Đã thanh toán</td>
+                <td>10</td>
+                <td>5000</td>
+                <td>500</td>
+                <td>0</td>
+                <td>500</td>
+                <td>100</td>
+                <td>4500</td>
+                <td>0</td>
+              </tr>
+              <!-- Thêm các hàng khác tại đây -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Phần báo cáo thu chi -->
+        <div id="thuchiReport" class="report-section">
+          <h2>Báo cáo thu chi</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Mã phiếu thu/chi</th>
+                <th>Người nhận</th>
+                <th>Thời gian</th>
+                <th>Thu/Chi</th>
+                <th>Mã chứng từ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TC001</td>
+                <td>Người A</td>
+                <td>09/12/2024</td>
+                <td>Thu</td>
+                <td>001</td>
+              </tr>
+              <!-- Thêm các hàng khác tại đây -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Phần báo cáo hàng hóa mới thêm vào -->
+        <div id="hanghoaReport" class="report-section">
+          <h2>Báo cáo cuối ngày về hàng hóa</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Mã hàng</th>
+                <th>Tên hàng</th>
+                <th>Số lượng bán</th>
+                <th>Doanh thu</th>
+                <th>Giá trị trả</th>
+                <th>Doanh thu thuần</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>HH001</td>
+                <td>Hàng hóa A</td>
+                <td>50</td>
+                <td>5000</td>
+                <td>0</td>
+                <td>5000</td>
+              </tr>
+              <tr>
+                <td>HH002</td>
+                <td>Hàng hóa B</td>
+                <td>20</td>
+                <td>2000</td>
+                <td>0</td>
+                <td>2000</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Phần báo cáo tổng hợp mới thêm vào -->
+        <div id="tonghopReport" class="report-section">
+          <h2>Báo cáo cuối ngày tổng hợp</h2>
+
+          <h3>Tổng kết thu chi</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Thu/Chi</th>
+                <th>Tiền mặt</th>
+                <th>CK</th>
+                <th>Thẻ</th>
+                <th>Ví</th>
+                <th>Điểm</th>
+                <th>Voucher</th>
+                <th>Tổng thực thu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Tổng kết bán hàng</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Giao dịch</th>
+                <th>Giá trị</th>
+                <th>Tiền mặt</th>
+                <th>CK</th>
+                <th>Thẻ</th>
+                <th>Ví</th>
+                <th>Điểm</th>
+                <th>Voucher</th>
+                <th>Tổng thực thu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Số lượng giao dịch</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Giao dịch</th>
+                <th>Số giao dịch</th>
+                <th>Tiền mặt</th>
+                <th>CK</th>
+                <th>Thẻ</th>
+                <th>Ví</th>
+                <th>Điểm</th>
+                <th>Voucher</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Hàng hóa</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Giao dịch</th>
+                <th>Số mặt hàng</th>
+                <th>Số lượng</th>
+                <th>Sản phẩm</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-      // Hàm hiển thị biểu đồ sản phẩm bán chạy
-      function renderSalesChart() {
-        const products = JSON.parse(localStorage.getItem("products")) || [];
-        const salesData = {};
+      function toggleDisplay() {
+        const isHorizontal =
+          document.querySelector('input[name="display"]:checked').value ===
+          "ngang";
+        const headerRow = document.getElementById("header-row");
+        const cells = headerRow.getElementsByTagName("th");
 
-        products.forEach((product) => {
-          if (!salesData[product.tenHH]) {
-            salesData[product.tenHH] = 0;
+        for (let i = 0; i < cells.length; i++) {
+          if (isHorizontal) {
+            cells[i].classList.remove("narrow");
+          } else {
+            cells[i].classList.add("narrow");
           }
-          salesData[product.tenHH] += product.soLuong; // Tính tổng số lượng bán của từng sản phẩm
-        });
-
-        const labels = Object.keys(salesData);
-        const data = Object.values(salesData);
-
-        const ctx = document.getElementById("salesChart").getContext("2d");
-        const salesChart = new Chart(ctx, {
-          type: "pie", // Biểu đồ tròn
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Số Lượng Bán",
-                data: data,
-                backgroundColor: [
-                  "rgba(75, 192, 192, 0.6)",
-                  "rgba(255, 99, 132, 0.6)",
-                  "rgba(255, 206, 86, 0.6)",
-                  "rgba(54, 162, 235, 0.6)",
-                  "rgba(153, 102, 255, 0.6)",
-                  "rgba(255, 159, 64, 0.6)",
-                ],
-                borderColor: [
-                  "rgba(75, 192, 192, 1)",
-                  "rgba(255, 99, 132, 1)",
-                  "rgba(255, 206, 86, 1)",
-                  "rgba(54, 162, 235, 1)",
-                  "rgba(153, 102, 255, 1)",
-                  "rgba(255, 159, 64, 1)",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              title: {
-                display: true,
-                text: "Sản Phẩm Bán Chạy",
-              },
-            },
-          },
-        });
+        }
       }
 
-      // Hàm hiển thị biểu đồ thống kê nhân viên
-      function renderEmployeeChart() {
-        const employeeData =
-          JSON.parse(localStorage.getItem("employeeData")) || [];
-        const employeeStats = {};
+      function filterTable() {
+        const customerSearch = document
+          .getElementById("searchCustomer")
+          .value.toLowerCase();
+        const employeeSearch = document.getElementById("searchEmployee").value;
+        const creatorSearch = document.getElementById("searchCreator").value;
+        const paymentSearch = document.getElementById("searchPayment").value;
+        const salesSearch = document.getElementById("searchSales").value;
 
-        employeeData.forEach((employee) => {
-          if (!employeeStats[employee.name]) {
-            employeeStats[employee.name] = 0;
+        const rows = document.querySelectorAll(
+          "#banhangReport tbody tr, #thuchiReport tbody tr"
+        );
+
+        rows.forEach((row) => {
+          const cells = row.getElementsByTagName("td");
+          const customerCell = cells[1]
+            ? cells[1].textContent.toLowerCase()
+            : "";
+          const employeeCell = cells[2] ? cells[2].textContent : "";
+          const paymentCell = cells[4] ? cells[4].textContent : "";
+
+          // Kiểm tra điều kiện lọc
+          const matchesCustomer = customerCell.includes(customerSearch);
+          const matchesEmployee =
+            employeeSearch === "" || employeeSearch === employeeCell;
+          const matchesCreator =
+            creatorSearch === "" || creatorSearch === cells[2]?.textContent; // Giả sử có thông tin người tạo trong cột Nhân viên
+          const matchesPayment =
+            paymentSearch === "" || paymentSearch === paymentCell;
+          const matchesSales =
+            salesSearch === "" || salesSearch === cells[5]?.textContent; // Giả sử có thông tin phương thức bán hàng trong cột Số lượng
+
+          // Hiện hoặc ẩn hàng
+          if (
+            matchesCustomer &&
+            matchesEmployee &&
+            matchesCreator &&
+            matchesPayment &&
+            matchesSales
+          ) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
           }
-          employeeStats[employee.name] += employee.sales; // Tính tổng doanh thu của từng nhân viên
-        });
-
-        const labels = Object.keys(employeeStats);
-        const data = Object.values(employeeStats);
-
-        const ctx = document.getElementById("employeeChart").getContext("2d");
-        const employeeChart = new Chart(ctx, {
-          type: "pie", // Biểu đồ tròn
-          data: {
-            labels: labels,
-            datasets: [
-              {
-                label: "Doanh Thu Nhân Viên",
-                data: data,
-                backgroundColor: [
-                  "rgba(255, 99, 132, 0.6)",
-                  "rgba(54, 162, 235, 0.6)",
-                  "rgba(255, 206, 86, 0.6)",
-                  "rgba(75, 192, 192, 0.6)",
-                  "rgba(153, 102, 255, 0.6)",
-                  "rgba(255, 159, 64, 0.6)",
-                ],
-                borderColor: [
-                  "rgba(255, 99, 132, 1)",
-                  "rgba(54, 162, 235, 1)",
-                  "rgba(255, 206, 86, 1)",
-                  "rgba(75, 192, 192, 1)",
-                  "rgba(153, 102, 255, 1)",
-                  "rgba(255, 159, 64, 1)",
-                ],
-                borderWidth: 1,
-              },
-            ],
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: {
-                position: "top",
-              },
-              title: {
-                display: true,
-                text: "Thống Kê Doanh Thu Nhân Viên",
-              },
-            },
-          },
         });
       }
 
-      // Hàm hiển thị lịch sử giao dịch
-      function renderTransactionHistory() {
-        const paymentHistory =
-          JSON.parse(localStorage.getItem("paymentHistory")) || [];
-        const transactionList = document.getElementById("transactionList");
+      function toggleReport() {
+        const concernValue = document.querySelector(
+          'input[name="concern"]:checked'
+        ).value;
+        const banhangReport = document.getElementById("banhangReport");
+        const thuchiReport = document.getElementById("thuchiReport");
+        const hanghoaReport = document.getElementById("hanghoaReport");
+        const tonghopReport = document.getElementById("tonghopReport");
 
-        paymentHistory.forEach((payment) => {
-          const listItem = document.createElement("li");
-          listItem.textContent = `Hóa Đơn ${payment.invoiceNumber}: Tổng ${payment.total} VNĐ, Tiền Khách Đưa ${payment.moneyGiven} VNĐ, Tiền Trả Lại ${payment.changeDue} VNĐ, Tiền Còn Nợ ${payment.amountDue} VNĐ, Ngày: ${payment.date}`;
-          transactionList.appendChild(listItem);
-        });
+        // Ẩn tất cả các báo cáo
+        banhangReport.style.display = "none";
+        thuchiReport.style.display = "none";
+        hanghoaReport.style.display = "none";
+        tonghopReport.style.display = "none";
+
+        // Hiện báo cáo tương ứng
+        if (concernValue === "banhang") {
+          banhangReport.style.display = "block";
+        } else if (concernValue === "thuchi") {
+          thuchiReport.style.display = "block";
+        } else if (concernValue === "hanghoa") {
+          hanghoaReport.style.display = "block";
+        } else if (concernValue === "tonghop") {
+          tonghopReport.style.display = "block";
+        }
       }
 
-      // Tải dữ liệu và hiển thị biểu đồ khi trang được tải
+      // Khởi tạo báo cáo bán hàng khi trang được tải
       window.onload = function () {
-        renderSalesChart();
-        renderEmployeeChart();
-        renderTransactionHistory(); // Hiển thị lịch sử giao dịch
+        toggleReport(); // Hiển thị báo cáo bán hàng mặc định
       };
     </script>
   </body>

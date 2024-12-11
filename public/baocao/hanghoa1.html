@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo hàng hóa</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+        flex-direction: column;
+      }
+      .toolbar {
+        display: flex;
+        justify-content: space-around;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .toolbar button {
+        padding: 10px 15px;
+        border: none;
+        background: #0056b3;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background 0.3s;
+      }
+      .toolbar button:hover {
+        background: #004494;
+      }
+      .container {
+        display: flex;
+        flex: 1;
+      }
+      .left-panel {
+        width: 30%;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-right: 20px;
+      }
+      .right-panel {
+        width: 70%;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+      }
+      h1 {
+        text-align: center;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      .chart-container {
+        background: white;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+        height: 300px; /* Chiều cao cho mỗi ô */
+        margin-bottom: 20px; /* Khoảng cách giữa các ô */
+      }
+      .chart-title {
+        margin-bottom: 10px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .search-box {
+        margin-bottom: 10px;
+      }
+      .group-list {
+        max-height: 150px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+      }
+      .group-item {
+        padding: 5px;
+        cursor: pointer;
+      }
+      .group-item:hover {
+        background-color: #f0f0f0;
+      }
+      .toggle-button {
+        cursor: pointer;
+        font-size: 20px;
+        margin-right: 10px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <button onclick="location.href='baocao.html'">Cuối ngày</button>
+      <button onclick="location.href='banhang1.html'">Bán hàng</button>
+      <button onclick="location.href='khachhang.html'">Khách hàng</button>
+      <button onclick="location.href='nhacungcap.html'">Nhà cung cấp</button>
+      <button onclick="location.href='nhanvien.html'">Nhân viên</button>
+      <button onclick="location.href='kanhbanhang.html'">
+        Kế hoạch bán hàng
+      </button>
+      <button onclick="location.href='taichinh.html'">Tài chính</button>
+    </div>
+
+    <div class="container">
+      <div class="left-panel">
+        <div class="section">
+          <h2>Kiểu hiển thị</h2>
+          <label
+            ><input type="radio" name="display" value="bando" /> Bản đồ</label
+          ><br />
+          <label
+            ><input type="radio" name="display" value="baocao" /> Báo cáo</label
+          >
+        </div>
+        <div class="section">
+          <h2>Mối quan tâm</h2>
+          <label
+            ><input type="radio" name="concern" value="banhang" /> Bán
+            hàng</label
+          ><br />
+          <label
+            ><input type="radio" name="concern" value="loinhuan" /> Lợi
+            nhuận</label
+          ><br />
+          <label
+            ><input type="radio" name="concern" value="xuatnhap" /> Xuất nhập
+            tồn</label
+          ><br />
+          <label
+            ><input type="radio" name="concern" value="nhanvien" /> Nhân viên
+            theo hàng bán</label
+          ><br />
+          <label
+            ><input type="radio" name="concern" value="nhanviennhap" /> Nhân
+            viên theo hàng nhập</label
+          >
+        </div>
+        <div class="section">
+          <h2>Thời gian</h2>
+          <input type="text" id="date" placeholder="Tuần này" />
+        </div>
+        <div class="section">
+          <h2>Hàng hóa</h2>
+          <label for="goods">Chọn hàng hóa:</label>
+          <select id="goods">
+            <option value="hanghoa1">Hàng hóa 1</option>
+            <option value="hanghoa2">Hàng hóa 2</option>
+          </select>
+        </div>
+        <div class="section">
+          <h2>Loại hàng</h2>
+          <label for="type">Chọn loại hàng:</label>
+          <select id="type">
+            <option value="loai1">Loại 1</option>
+            <option value="loai2">Loại 2</option>
+          </select>
+        </div>
+        <div class="section">
+          <h2>
+            Nhóm hàng
+            <span class="toggle-button" onclick="toggleGroupList()">⯈</span>
+          </h2>
+          <div id="group-container">
+            <label for="group-search">Tìm kiếm nhóm hàng:</label>
+            <input
+              type="text"
+              id="group-search"
+              class="search-box"
+              onkeyup="filterGroups()"
+              placeholder="Tìm kiếm nhóm hàng..."
+            />
+            <div class="group-list" id="group-list">
+              <div class="group-item">Tất cả</div>
+              <div class="group-item">Thuốc lá</div>
+              <div class="group-item">Sữa</div>
+              <div class="group-item">Nước ngọt</div>
+              <div class="group-item">Mỹ phẩm</div>
+              <div class="group-item">Kẹo bánh</div>
+              <div class="group-item">Đồ uống có cồn</div>
+              <div class="group-item">Thực phẩm ăn liền</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-panel">
+        <div class="chart-container">
+          <div class="chart-title">
+            Top 10 sản phẩm doanh thu cao nhất (đã trừ trả hàng)
+          </div>
+          <div><!-- Biểu đồ doanh thu sẽ được hiển thị ở đây --></div>
+        </div>
+
+        <div class="chart-container">
+          <div class="chart-title">
+            Top 10 sản phẩm bán chạy theo số lượng (đã trừ trả hàng)
+          </div>
+          <div><!-- Biểu đồ số lượng sẽ được hiển thị ở đây --></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function filterGroups() {
+        const input = document.getElementById("group-search");
+        const filter = input.value.toLowerCase();
+        const groupList = document.getElementById("group-list");
+        const groups = groupList.getElementsByClassName("group-item");
+
+        for (let i = 0; i < groups.length; i++) {
+          const textValue = groups[i].textContent || groups[i].innerText;
+          groups[i].style.display = textValue.toLowerCase().includes(filter)
+            ? ""
+            : "none";
+        }
+      }
+
+      function toggleGroupList() {
+        const groupContainer = document.getElementById("group-container");
+        groupContainer.classList.toggle("hidden");
+      }
+    </script>
+  </body>
+</html>

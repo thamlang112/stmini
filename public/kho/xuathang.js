@@ -25,12 +25,12 @@ document.addEventListener("DOMContentLoaded", () => {
     xuatHangTableBody.innerHTML = "";
     xuatHangData.forEach((item) => {
       const row = `<tr>
-                <td>${item.stt}</td>
-                <td>${item.maHang}</td>
-                <td>${item.tenHang}</td>
-                <td>${item.xuatXu}</td>
-                <td>${item.soLuong}</td>
-            </tr>`;
+                  <td>${item.stt}</td>
+                  <td>${item.maHang}</td>
+                  <td>${item.tenHang}</td>
+                  <td>${item.xuatXu}</td>
+                  <td>${item.soLuong}</td>
+              </tr>`;
       xuatHangTableBody.insertAdjacentHTML("beforeend", row);
     });
   }

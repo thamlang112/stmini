@@ -32,8 +32,17 @@ document.getElementById("nhapNCC").onclick = function () {
 document.getElementById("xuatFile").onclick = function () {
   const confirmation = confirm("Bạn có muốn tải xuống file không?");
   if (confirmation) {
-    // Thay đổi đường dẫn file tại đây
-    window.location.href = "path/to/your/file.xlsx"; // Đường dẫn đến file thực tế
+    // Giả định rằng bạn có một file để tải về, thay đổi đường dẫn đến file thực tế
+    window.location.href = "path/to/your/file.xlsx"; // Thay đổi đường dẫn file tại đây
+  }
+};
+
+window.onclick = function (event) {
+  if (event.target == document.getElementById("modal")) {
+    document.getElementById("modal").style.display = "none";
+  }
+  if (event.target == document.getElementById("importModal")) {
+    document.getElementById("importModal").style.display = "none";
   }
 };
 

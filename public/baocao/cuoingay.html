@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo cuối ngày về bán hàng</title>
+    <link rel="stylesheet" href="cuoingay.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Báo cáo cuối ngày</h3>
+            </div>
+
+            <!-- Kiểu hiển thị -->
+            <div class="box">
+                <h4>Kiểu hiển thị</h4>
+                <div class="filter">
+                    <input type="radio" id="bao-cao" name="display" checked>
+                    <label for="bao-cao">Báo cáo</label><br>
+                </div>
+            </div>
+
+            <!-- Mối quan tâm -->
+            <div class="box">
+                <h4>Mối quan tâm</h4>
+                <div class="filter">
+                    <input type="radio" id="ban-hang" name="interest" checked>
+                    <label for="ban-hang">Bán hàng</label><br>
+                    <input type="radio" id="thu-chi" name="interest">
+                    <label for="thu-chi">Thu chi</label><br>
+                    <input type="radio" id="hang-hoa" name="interest">
+                    <label for="hang-hoa">Hàng hóa</label><br>
+                    <input type="radio" id="tong-hop" name="interest">
+                    <label for="tong-hop">Tổng hợp</label>
+                </div>
+            </div>
+
+            <!-- Thời gian -->
+            <div class="box">
+                <h4>Thời gian</h4>
+                <div class="filter">
+                    <label for="time-start">Từ:</label>
+                    <input type="date" id="time-start" name="time-start">
+                    <br><br>
+                    <label for="time-end">Đến:</label>
+                    <input type="date" id="time-end" name="time-end">
+                </div>
+            </div>
+
+            <!-- Khách hàng -->
+            <div class="box">
+                <h4>Khách hàng</h4>
+                <input type="text" placeholder="Theo mã, tên, điện thoại">
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="report-header">
+                <h2>Báo cáo cuối ngày về bán hàng</h2>
+                <p>Ngày bán: 10/12/2024 - Ngày thanh toán: 10/12/2024</p>
+                <p>Chi nhánh: Chi nhánh trung tâm</p>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Mã giao dịch</th>
+                        <th>Thời gian</th>
+                        <th>SL</th>
+                        <th>Doanh thu</th>
+                        <th>Thu khác</th>
+                        <th>VAT</th>
+                        <th>Phí trả hàng</th>
+                        <th>Thực thu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Hóa đơn: 1</td>
+                        <td>10/12/2024</td>
+                        <td>31</td>
+                        <td>504,000</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>504,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

@@ -48,13 +48,13 @@ function addNewRow() {
   const currentRow = rows + 1;
 
   newRow.innerHTML = `
-        <td>${currentRow}</td>
-        <td><input type="text" id="tenNguyenLieu${currentRow}" placeholder="Tên nguyên liệu" required></td>
-        <td><input type="text" id="dvt${currentRow}" placeholder="ĐVT" required></td>
-        <td><input type="number" id="soLuong${currentRow}" value="0" min="0" onchange="updateTotal(${currentRow});" required></td>
-        <td><input type="text" id="donGia${currentRow}" placeholder="Đơn giá" onchange="updateTotal(${currentRow});" required></td>
-        <td><input type="text" id="tongGia${currentRow}" value="0" readonly></td>
-    `;
+          <td>${currentRow}</td>
+          <td><input type="text" id="tenNguyenLieu${currentRow}" placeholder="Tên nguyên liệu" required></td>
+          <td><input type="text" id="dvt${currentRow}" placeholder="ĐVT" required></td>
+          <td><input type="number" id="soLuong${currentRow}" value="0" min="0" onchange="updateTotal(${currentRow});" required></td>
+          <td><input type="text" id="donGia${currentRow}" placeholder="Đơn giá" onchange="updateTotal(${currentRow});" required></td>
+          <td><input type="text" id="tongGia${currentRow}" value="0" readonly></td>
+      `;
 
   document.getElementById("productTableBody").appendChild(newRow);
 }
@@ -110,15 +110,15 @@ function saveData() {
 function resetTable() {
   const tableBody = document.getElementById("productTableBody");
   tableBody.innerHTML = `
-        <tr>
-            <td>1</td>
-            <td><input type="text" id="tenNguyenLieu1" placeholder="Tên nguyên liệu" required></td>
-            <td><input type="text" id="dvt1" placeholder="ĐVT" required></td>
-            <td><input type="number" id="soLuong1" value="0" min="0" onchange="updateTotal(1);" required></td>
-            <td><input type="text" id="donGia1" placeholder="Đơn giá" onchange="updateTotal(1);" required></td>
-            <td><input type="text" id="tongGia1" value="0" readonly></td>
-        </tr>
-    `;
+          <tr>
+              <td>1</td>
+              <td><input type="text" id="tenNguyenLieu1" placeholder="Tên nguyên liệu" required></td>
+              <td><input type="text" id="dvt1" placeholder="ĐVT" required></td>
+              <td><input type="number" id="soLuong1" value="0" min="0" onchange="updateTotal(1);" required></td>
+              <td><input type="text" id="donGia1" placeholder="Đơn giá" onchange="updateTotal(1);" required></td>
+              <td><input type="text" id="tongGia1" value="0" readonly></td>
+          </tr>
+      `;
 }
 
 function loadData() {
@@ -164,21 +164,21 @@ function loadHistory() {
     const historyItem = document.createElement("div");
     historyItem.className = "history-item";
     historyItem.innerHTML = `
-            <strong>Nhà CC:</strong> ${entry.nhaCC}<br>
-            <strong>Kho hàng:</strong> ${entry.khoHang}<br>
-            <strong>Ngày nhập:</strong> ${entry.ngayNhap}<br>
-            <strong>Người nhập:</strong> ${entry.nguoiNhap}<br>
-            <strong>Ghi chú:</strong> ${entry.ghiChu}<br>
-            <strong>Tổng cộng:</strong> ${entry.total}<br>
-            <strong>Chi tiết:</strong><br>
-            ${entry.productDetails
-              .map(
-                (prod) => `
-                - ${prod.tenNguyenLieu} (${prod.dvt}), Số lượng: ${prod.soLuong}, Đơn giá: ${prod.donGia}, Tổng giá: ${prod.tongGia}<br>
-            `
-              )
-              .join("")}
-        `;
+              <strong>Nhà CC:</strong> ${entry.nhaCC}<br>
+              <strong>Kho hàng:</strong> ${entry.khoHang}<br>
+              <strong>Ngày nhập:</strong> ${entry.ngayNhap}<br>
+              <strong>Người nhập:</strong> ${entry.nguoiNhap}<br>
+              <strong>Ghi chú:</strong> ${entry.ghiChu}<br>
+              <strong>Tổng cộng:</strong> ${entry.total}<br>
+              <strong>Chi tiết:</strong><br>
+              ${entry.productDetails
+                .map(
+                  (prod) => `
+                  - ${prod.tenNguyenLieu} (${prod.dvt}), Số lượng: ${prod.soLuong}, Đơn giá: ${prod.donGia}, Tổng giá: ${prod.tongGia}<br>
+              `
+                )
+                .join("")}
+          `;
     historyContainer.appendChild(historyItem);
   });
 }

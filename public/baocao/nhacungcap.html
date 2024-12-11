@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo nhà cung cấp</title>
+    <link rel="stylesheet" href="nhacungcap.css">
+    <script src="nhacungcap.js" defer></script> <!-- Thêm liên kết tới file JavaScript -->
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Báo cáo nhà cung cấp</h2>
+
+            <div class="box">
+                <h3>Kiểu hiển thị</h3>
+                <label>
+                    <input type="radio" name="display" checked onclick="toggleDisplay('chart')">
+                    Biểu đồ
+                </label><br>
+                <label>
+                    <input type="radio" name="display" onclick="toggleDisplay('report')">
+                    Báo cáo
+                </label>
+            </div>
+
+            <div class="box">
+                <h3>Mối quan tâm</h3>
+                <label>
+                    <input type="radio" name="interest" checked>
+                    Nhập hàng
+                </label><br>
+                <label>
+                    <input type="radio" name="interest">
+                    Công nợ
+                </label><br>
+                <label>
+                    <input type="radio" name="interest">
+                    Hàng nhập theo NCC
+                </label>
+            </div>
+
+            <div class="box">
+                <h3>Thời gian</h3>
+                <div class="filter">
+                    <label for="time-start">Từ:</label>
+                    <input type="date" id="time-start" name="time-start">
+                    <label for="time-end">Đến:</label>
+                    <input type="date" id="time-end" name="time-end">
+                </div>
+            </div>
+
+            <div class="box">
+                <h3>Nhà cung cấp</h3>
+                <input type="text" placeholder="Theo mã, tên, điện thoại">
+            </div>
+        </div>
+        <div class="sidebar2">
+            <div class="sidebar1">
+                <div class="main-content">
+                    <h3>Top 10 nhà cung cấp nhập hàng nhiều nhất (đã trừ trả hàng)</h3>
+                    <div class="chart" id="chart-content">
+                        <div class="x-axis">
+                            <span>0k</span>
+                            <span>50k</span>
+                            <span>100k</span>
+                            <span>150k</span>
+                            <span>200k</span>
+                            <span>250k</span>
+                            <span>300k</span>
+                            <span>350k</span>
+                            <span>400k</span>
+                            <span>450k</span>
+                            <span>500k</span>
+                            <span>550k</span>
+                            <span>600k</span>
+                            <span>650k</span>
+                            <span>700k</span>
+                            <span>750k</span>
+                            <span>800k</span>
+                            <span>850k</span>
+                            <span>900k</span>
+                            <span>950k</span>
+                            <span>1tr</span>
+                        </div>
+                        <div class="grid-lines">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>   
+                        </div>
+                        <div class="y-axis">
+                            <span></span>
+                            <span>Cửa hàng Đại việt</span>
+                            <span></span>
+                        </div>
+                        <div class="bar" data-value="930k">
+                        </div>
+                    </div>
+                    <div class="report" id="report-content" style="display: none;">
+                        <p>Đây là báo cáo nhà cung cấp chi tiết...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

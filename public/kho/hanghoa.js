@@ -47,20 +47,20 @@ function loadProducts() {
   products.forEach((product, index) => {
     const newRow = document.createElement("tr");
     newRow.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${product.maHH}</td>
-          <td>${product.xuatxu}</td>
-          <td>${product.dvt}</td>
-          <td>${product.tenHH}</td>
-          <td>${product.giaNhap}</td>
-          <td>${product.nhaCC}</td>
-          <td>${product.soLuong}</td>
-          <td>${product.nh}</td>
-          <td>${product.giaBan}</td>
-          <td>${product.maVach}</td>
-          <td>${product.trangThai}</td>
-          <td>${product.thueVAT}</td>
-      `;
+            <td>${index + 1}</td>
+            <td>${product.maHH}</td>
+            <td>${product.xuatxu}</td>
+            <td>${product.dvt}</td>
+            <td>${product.tenHH}</td>
+            <td>${product.giaNhap}</td>
+            <td>${product.nhaCC}</td>
+            <td>${product.soLuong}</td>
+            <td>${product.nh}</td>
+            <td>${product.giaBan}</td>
+            <td>${product.maVach}</td>
+            <td>${product.trangThai}</td>
+            <td>${product.thueVAT}</td>
+        `;
     tbody.appendChild(newRow);
   });
   addSellButtonListeners(); // Thêm sự kiện cho nút bán

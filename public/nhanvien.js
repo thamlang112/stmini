@@ -39,17 +39,17 @@ function renderEmployeeTable() {
   employees.forEach((employee, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${employee.maNV}</td>
-          <td>${employee.tenNV}</td>
-          <td>${employee.sdt}</td>
-          <td>${employee.diaChi}</td>
-          <td>${employee.username}</td>
-          <td>${employee.password}</td>
-          <td>${employee.ngaySinh}</td>
-          <td>${employee.luong}</td>
-          <td><button onclick="removeEmployee(${index})">Xóa</button></td>
-      `;
+            <td>${index + 1}</td>
+            <td>${employee.maNV}</td>
+            <td>${employee.tenNV}</td>
+            <td>${employee.sdt}</td>
+            <td>${employee.diaChi}</td>
+            <td>${employee.username}</td>
+            <td>${employee.password}</td>
+            <td>${employee.ngaySinh}</td>
+            <td>${employee.luong}</td>
+            <td><button onclick="removeEmployee(${index})">Xóa</button></td>
+        `;
     employeeTableBody.appendChild(row);
   });
 }

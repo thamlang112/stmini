@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh sách sản phẩm</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f9f9f9;
+      }
+      .product-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background-color: #00bcd4;
+        color: white;
+      }
+      img {
+        max-width: 100px;
+        height: auto;
+      }
+      .product-info {
+        display: none; /* Ẩn thông tin sản phẩm mặc định */
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        margin: 20px 0;
+      }
+      .button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        cursor: pointer;
+      }
+      .button.update {
+        background-color: #28a745;
+      }
+      .button.print {
+        background-color: #6c757d;
+      }
+      .button.copy {
+        background-color: #007bff;
+      }
+      .button.stop {
+        background-color: #dc3545;
+      }
+      .button.delete {
+        background-color: #dc3545;
+      }
+      .button.import {
+        background-color: #17a2b8;
+      }
+      .button.close {
+        background-color: #dc3545;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Danh sách sản phẩm</h1>
+
+    <table class="product-table">
+      <thead>
+        <tr>
+          <th>Hình ảnh</th>
+          <th>Mã hàng</th>
+          <th>Tên hàng</th>
+          <th>Giá bán</th>
+          <th>Giá vốn</th>
+          <th>Tồn kho</th>
+        </tr>
+      </thead>
+      <tbody id="productTableBody">
+        <tr
+          onclick="showProductInfo('SP00026', 'Hộp phở bò phố cổ', '8968401241203', 'Thương hiệu 1', '10,000 VNĐ', '8,000 VNĐ', '500g', 'Kệ 3', 'Phở bò phố cổ, hương vị thơm ngon, dễ chế biến.', 'Công ty ABC')"
+        >
+          <td><img src="path_to_image.jpg" alt="Hộp phở bò phố cổ" /></td>
+          <td>SP00026</td>
+          <td>Hộp phở bò phố cổ</td>
+          <td>10,000 VNĐ</td>
+          <td>8,000 VNĐ</td>
+          <td>100</td>
+        </tr>
+        <!-- Thêm các sản phẩm khác ở đây -->
+      </tbody>
+    </table>
+
+    <div class="product-info" id="productInfo">
+      <h2 id="productName"></h2>
+      <div><strong>Mã hàng:</strong> <span id="productCode"></span></div>
+      <div><strong>Mã vạch:</strong> <span id="productBarcode"></span></div>
+      <div><strong>Thương hiệu:</strong> <span id="productBrand"></span></div>
+      <div><strong>Giá bán:</strong> <span id="productPrice"></span></div>
+      <div><strong>Giá vốn:</strong> <span id="productCost"></span></div>
+      <div><strong>Trọng lượng:</strong> <span id="productWeight"></span></div>
+      <div><strong>Vị trí:</strong> <span id="productLocation"></span></div>
+      <div><strong>Mô tả:</strong> <span id="productDescription"></span></div>
+      <div>
+        <strong>Nhà cung cấp:</strong> <span id="productSupplier"></span>
+      </div>
+      <div class="button-container">
+        <button class="button update">Cập nhật</button>
+        <button class="button print" onclick="window.print()">In tem mã</button>
+        <button class="button copy">Sao chép</button>
+        <button class="button stop">Ngừng kinh doanh</button>
+        <button class="button delete">Xóa</button>
+        <button class="button import">Nhập hàng</button>
+        <button class="button close" onclick="hideProductInfo()">Đóng</button>
+      </div>
+    </div>
+
+    <script>
+      function showProductInfo(
+        code,
+        name,
+        barcode,
+        brand,
+        price,
+        cost,
+        weight,
+        location,
+        description,
+        supplier
+      ) {
+        document.getElementById("productCode").innerText = code;
+        document.getElementById("productName").innerText = name;
+        document.getElementById("productBarcode").innerText = barcode;
+        document.getElementById("productBrand").innerText = brand;
+        document.getElementById("productPrice").innerText = price;
+        document.getElementById("productCost").innerText = cost;
+        document.getElementById("productWeight").innerText = weight;
+        document.getElementById("productLocation").innerText = location;
+        document.getElementById("productDescription").innerText = description;
+        document.getElementById("productSupplier").innerText = supplier;
+
+        // Hiển thị thông tin sản phẩm
+        document.getElementById("productInfo").style.display = "block";
+      }
+
+      function hideProductInfo() {
+        document.getElementById("productInfo").style.display = "none";
+      }
+      function closeModal() {
+        document.getElementById("productInfo").style.display = "none";
+      }
+      document.addEventListener("DOMContentLoaded", () => {
+        const product = JSON.parse(localStorage.getItem("selectedProduct"));
+        if (product) {
+          const productDetails = `
+                    <img src="${
+                      product.image
+                    }" alt="Hình ảnh sản phẩm" style="width: 100px; height: auto;">
+                    <p>Mã hàng: ${product.maHH}</p>
+                    <p>Tên hàng: ${product.tenHH}</p>
+                    <p>Giá bán: ${product.giaBan.toLocaleString()} VNĐ</p>
+                    <p>Giá vốn: ${product.giaNhap.toLocaleString()} VNĐ</p>
+                    <p>Tồn kho: ${product.soLuong}</p>
+                    <p>Nhà cung cấp: ${product.nhaCC}</p>
+                    <p>Trạng thái: ${product.trangThai}</p>
+                    <p>Thuế VAT: ${product.thueVAT}</p>
+                `;
+          document.getElementById("productDetails").innerHTML = productDetails;
+        }
+      });
+    </script>
+    <div id="productDetails"></div>
+  </body>
+</html>

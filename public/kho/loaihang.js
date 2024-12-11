@@ -54,12 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
     loaiHangTableBody.innerHTML = "";
     loaiHangData.forEach((item) => {
       const row = `<tr>
-                <td>${item.stt}</td>
-                <td>${item.maNCC}</td>
-                <td>${item.tenHang}</td>
-                <td>${item.xuatXu}</td>
-                <td>${item.soLuong}</td>
-            </tr>`;
+                  <td>${item.stt}</td>
+                  <td>${item.maNCC}</td>
+                  <td>${item.tenHang}</td>
+                  <td>${item.xuatXu}</td>
+                  <td>${item.soLuong}</td>
+              </tr>`;
       loaiHangTableBody.insertAdjacentHTML("beforeend", row);
     });
   }
@@ -69,11 +69,11 @@ document.addEventListener("DOMContentLoaded", () => {
     nccTableBody.innerHTML = "";
     nccData.forEach((ncc) => {
       const row = `<tr>
-                <td>${ncc.maNCC}</td>
-                <td>${ncc.tenNCC}</td>
-                <td>${ncc.diaChi}</td>
-                <td>${ncc.sdt}</td>
-            </tr>`;
+                  <td>${ncc.maNCC}</td>
+                  <td>${ncc.tenNCC}</td>
+                  <td>${ncc.diaChi}</td>
+                  <td>${ncc.sdt}</td>
+              </tr>`;
       nccTableBody.insertAdjacentHTML("beforeend", row);
     });
   }

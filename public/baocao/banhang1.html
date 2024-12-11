@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Báo cáo bán hàng</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+        display: flex;
+      }
+      .left-panel {
+        width: 30%;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        margin-right: 20px;
+      }
+      .right-panel {
+        width: 70%;
+        padding: 20px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        text-align: center;
+      }
+      .section {
+        margin-bottom: 20px;
+      }
+      #report-content {
+        display: none; /* Ẩn nội dung báo cáo ban đầu */
+      }
+      .export-button {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 5px;
+      }
+      .export-button:hover {
+        background-color: #218838;
+      }
+    </style>
+    <script>
+      function toggleDisplay() {
+        const displayType = document.querySelector(
+          'input[name="display"]:checked'
+        ).value;
+        const reportContent = document.getElementById("report-content");
+        const defaultContent = document.getElementById("default-content");
+
+        if (displayType === "baocao") {
+          reportContent.style.display = "block";
+          defaultContent.style.display = "none";
+        } else {
+          reportContent.style.display = "none";
+          defaultContent.style.display = "block";
+        }
+      }
+
+      function exportToExcel() {
+        // Giả lập tải xuống file Excel
+        alert("Tải xuống file Excel...");
+        // Thay thế bằng logic tải file Excel thực tế
+      }
+    </script>
+  </head>
+  <body>
+    <div class="left-panel">
+      <div class="section">
+        <h2>Kiểu hiển thị</h2>
+        <label
+          ><input
+            type="radio"
+            name="display"
+            value="bando"
+            onclick="toggleDisplay()"
+          />
+          Biểu đồ</label
+        ><br />
+        <label
+          ><input
+            type="radio"
+            name="display"
+            value="baocao"
+            onclick="toggleDisplay()"
+          />
+          Báo cáo</label
+        >
+      </div>
+      <div class="section">
+        <h2>Mối quan tâm</h2>
+        <label
+          ><input type="radio" name="concern" value="thoigian" /> Thời
+          gian</label
+        ><br />
+        <label
+          ><input type="radio" name="concern" value="loinhuan" /> Lợi
+          nhuận</label
+        ><br />
+        <label
+          ><input type="radio" name="concern" value="tragia" /> Trả hàng</label
+        ><br />
+        <label
+          ><input type="radio" name="concern" value="nhanvien" /> Nhân
+          viên</label
+        >
+      </div>
+      <div class="section">
+        <h2>Bảng giá</h2>
+        <label for="price-table">Chọn bảng giá:</label>
+        <select id="price-table">
+          <option value="table1">Bảng giá 1</option>
+          <option value="table2">Bảng giá 2</option>
+        </select>
+      </div>
+      <div class="section">
+        <h2>Thời gian</h2>
+        <input type="date" id="date" />
+      </div>
+      <div class="section">
+        <h2>Phương thức bán hàng</h2>
+        <label
+          ><input type="checkbox" name="method" value="online" /> Online</label
+        ><br />
+        <label
+          ><input type="checkbox" name="method" value="offline" />
+          Offline</label
+        >
+      </div>
+      <div class="section">
+        <h2>Kênh bán</h2>
+        <label
+          ><input type="checkbox" name="channel" value="channel1" /> Kênh
+          1</label
+        ><br />
+        <label
+          ><input type="checkbox" name="channel" value="channel2" /> Kênh
+          2</label
+        >
+      </div>
+    </div>
+    <div class="right-panel">
+      <div id="default-content">
+        <h1>Doanh thu tháng này</h1>
+        <div
+          style="
+            height: 300px;
+            border: 1px solid #ccc;
+            text-align: center;
+            line-height: 300px;
+            color: #999;
+          "
+        >
+          Nội dung ở đây
+        </div>
+      </div>
+      <div id="report-content">
+        <h1>Báo cáo bán hàng theo thời gian</h1>
+        <p>
+          Từ ngày: <strong>09/12/2024</strong> đến ngày:
+          <strong>09/12/2024</strong>
+        </p>
+        <p>Chỉ nhận: <strong>Chỉ nhân trung tâm</strong></p>
+        <table style="width: 100%; border-collapse: collapse; margin-top: 20px">
+          <thead>
+            <tr>
+              <th style="border: 1px solid #ddd; padding: 8px">Thời gian</th>
+              <th style="border: 1px solid #ddd; padding: 8px">Doanh thu</th>
+              <th style="border: 1px solid #ddd; padding: 8px">Giá trị trị</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="border: 1px solid #ddd; padding: 8px">...</td>
+              <td style="border: 1px solid #ddd; padding: 8px">...</td>
+              <td style="border: 1px solid #ddd; padding: 8px">...</td>
+            </tr>
+            <!-- Thêm các hàng dữ liệu tại đây -->
+          </tbody>
+        </table>
+        <button class="export-button" onclick="exportToExcel()">
+          Xuất tất cả
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

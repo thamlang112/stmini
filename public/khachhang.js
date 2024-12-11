@@ -27,14 +27,14 @@ function renderCustomerTable() {
   customers.forEach((customer, index) => {
     const row = document.createElement("tr");
     row.innerHTML = `
-          <td>${index + 1}</td>
-          <td>${customer.maKH}</td>
-          <td>${customer.tenKH}</td>
-          <td>${customer.diaChi}</td>
-          <td>${customer.sdt}</td>
-          <td><button onclick="removeCustomer(${index})">Xóa</button></td>
-          <td>${customer.ngayTao}</td>
-      `;
+            <td>${index + 1}</td>
+            <td>${customer.maKH}</td>
+            <td>${customer.tenKH}</td>
+            <td>${customer.diaChi}</td>
+            <td>${customer.sdt}</td>
+            <td><button onclick="removeCustomer(${index})">Xóa</button></td>
+            <td>${customer.ngayTao}</td>
+        `;
     customerTableBody.appendChild(row);
   });
 }

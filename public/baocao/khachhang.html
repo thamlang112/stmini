@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Báo cáo khách hàng</title>
+    <link rel="stylesheet" href="khachhang.css">
+    <script src="khachhang.js" defer></script> <!-- Thêm liên kết tới file JavaScript -->
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>Báo cáo khách hàng</h2>
+
+            <div class="box">
+                <h3>Kiểu hiển thị</h3>
+                <label>
+                    <input type="radio" name="display" checked onclick="toggleDisplay('chart')">
+                    Biểu đồ
+                </label><br>
+                <label>
+                    <input type="radio" name="display" onclick="toggleDisplay('report')">
+                    Báo cáo
+                </label>
+            </div>
+
+            <div class="box">
+                <h3>Mối quan tâm</h3>
+                <label>
+                    <input type="radio" name="interest" checked>
+                    Bán hàng
+                </label><br>
+                <label>
+                    <input type="radio" name="interest">
+                    Lợi nhuận
+                </label><br>
+                <label>
+                    <input type="radio" name="interest">
+                    Công nợ
+                </label><br>
+                <label>
+                    <input type="radio" name="interest">
+                    Hàng bán theo khách
+                </label>
+            </div>
+
+            <div class="box">
+                <h3>Thời gian</h3>
+                <label>
+                    <input type="radio" name="time" checked>
+                    Tuần này
+                </label><br>
+                <label>
+                    <input type="radio" name="time">
+                    Lựa chọn khác
+                </label>
+            </div>
+
+            <div class="box">
+                <h3>Khách hàng</h3>
+                <input type="text" placeholder="Theo mã, tên, điện thoại">
+            </div>
+        </div>
+        <div class="sidebar2">
+            <div class="sidebar1">
+                <div class="main-content">
+                    <h3>Top 10 khách hàng mua nhiều nhất (đã trừ trả hàng)</h3>
+                    <div class="chart" id="chart-content">
+                        <div class="x-axis">
+                            <span>0k</span>
+                            <span>50k</span>
+                            <span>100k</span>
+                            <span>150k</span>
+                            <span>200k</span>
+                            <span>250k</span>
+                            <span>300k</span>
+                            <span>350k</span>
+                            <span>400k</span>
+                            <span>450k</span>
+                            <span>500k</span>
+                        </div>
+                        <div class="grid-lines">
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                            <div class="line"></div>
+                        </div>
+                        <div class="y-axis">
+                            <span></span>
+                            <span>Anh Hoàng - Sài Gòn</span>
+                            <span></span>
+                        </div>
+                        <div class="bar" data-value="300k">
+                        </div>
+                    </div>
+                    <div class="report" id="report-content" style="display: none;">
+                        <p>Đây là báo cáo khách hàng chi tiết...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

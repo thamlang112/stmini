@@ -264,7 +264,7 @@ function deleteProduct(code) {
 }
 
 function importProduct() {
-  window.location.href = "kho/nhaphang.html"; // Chuyển đến trang nhập hàng
+  window.location.href = "kho/qlhanghoa.html"; // Chuyển đến trang Quản Lý Hàng Hóa
 }
 
 function closeDetails(button) {

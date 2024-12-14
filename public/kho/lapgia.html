@@ -21,15 +21,16 @@
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       }
-      .row {
-        margin-bottom: 20px;
-      }
       .table th,
       .table td {
         vertical-align: middle;
       }
-      .btn-custom {
-        margin-right: 10px;
+      .editable {
+        cursor: pointer;
+        color: #007bff;
+      }
+      .modal-content {
+        padding: 20px;
       }
     </style>
   </head>
@@ -41,38 +42,69 @@
             <h5>Bảng giá</h5>
             <input
               type="text"
+              id="searchInput"
               class="form-control mb-3"
-              placeholder="Tìm kiếm bảng giá"
+              placeholder="Tìm kiếm sản phẩm"
+              oninput="filterTable()"
             />
 
             <h6>Nhóm hàng</h6>
-            <select class="form-control mb-3">
-              <option>Tất cả</option>
-              <option>Thuốc lá</option>
-              <option>Sữa</option>
-              <option>Mỹ phẩm</option>
-              <option>Kẹo bánh</option>
-              <option>Đồ uống có cồn</option>
-              <option>Thực phẩm ăn liền</option>
+            <select
+              class="form-control mb-3"
+              id="groupSelect"
+              onchange="filterByGroup()"
+            >
+              <option value="">Chọn nhóm hàng</option>
+              <option value="sua">Sữa</option>
+              <option value="mypham">Mỹ phẩm</option>
+              <option value="keobanh">Kẹo bánh</option>
+              <option value="doUong">Đồ uống có cồn</option>
+              <option value="thucpham">Thực phẩm ăn liền</option>
             </select>
+            <div
+              id="selectedGroup"
+              class="mt-2"
+              style="font-weight: bold"
+            ></div>
 
             <h6>Tồn kho</h6>
             <div>
               <label
-                ><input type="radio" name="tonkho" value="tatca" checked />Tất
-                cả</label
+                ><input
+                  type="radio"
+                  name="tonkho"
+                  value="tatca"
+                  checked
+                  onclick="filterStock(this)"
+                />
+                Tất cả</label
               ><br />
               <label
-                ><input type="radio" name="tonkho" value="duoi" />Dưới mức
-                tồn</label
+                ><input
+                  type="radio"
+                  name="tonkho"
+                  value="duoi"
+                  onclick="filterStock(this)"
+                />
+                Dưới mức tồn</label
               ><br />
               <label
-                ><input type="radio" name="tonkho" value="vuot" />Vượt mức
-                tồn</label
+                ><input
+                  type="radio"
+                  name="tonkho"
+                  value="vuot"
+                  onclick="filterStock(this)"
+                />
+                Vượt mức tồn</label
               ><br />
               <label
-                ><input type="radio" name="tonkho" value="conhang" />Còn hàng
-                trong kho</label
+                ><input
+                  type="radio"
+                  name="tonkho"
+                  value="conhang"
+                  onclick="filterStock(this)"
+                />
+                Còn hàng trong kho</label
               ><br />
             </div>
           </div>
@@ -84,19 +116,16 @@
               <input
                 type="file"
                 id="fileInput"
-                class="btn btn-info btn-custom"
+                class="btn btn-info"
                 style="display: none"
               />
               <button
-                class="btn btn-success btn-custom"
+                class="btn btn-success"
                 onclick="document.getElementById('fileInput').click();"
               >
                 Import
               </button>
-              <button
-                class="btn btn-primary btn-custom"
-                onclick="exportToExcel();"
-              >
+              <button class="btn btn-primary" onclick="exportToExcel();">
                 Xuất file
               </button>
             </div>
@@ -112,64 +141,130 @@
                 </tr>
               </thead>
               <tbody>
-                <tr>
+                <tr data-group="mypham">
                   <td>SP0001</td>
                   <td>Hộp phấn phủ Reeve 100g</td>
-                  <td>100</td>
+                  <td class="stock">100</td>
                   <td>8,000</td>
                   <td>14,000</td>
-                  <td>10,000</td>
+                  <td class="editable" onclick="openEditModal(this)">10,000</td>
                 </tr>
-                <tr>
+                <tr data-group="mypham">
                   <td>SP0002</td>
                   <td>Mỹ phẩm bột Nhật Bản</td>
-                  <td>50</td>
+                  <td class="stock">50</td>
                   <td>20,000</td>
                   <td>28,000</td>
-                  <td>20,000</td>
+                  <td class="editable" onclick="openEditModal(this)">20,000</td>
                 </tr>
-                <tr>
+                <tr data-group="doUong">
                   <td>SP0003</td>
                   <td>Rượu Chivas Regal 12</td>
-                  <td>20</td>
+                  <td class="stock">20</td>
                   <td>400,000</td>
                   <td>550,000</td>
-                  <td>400,000</td>
+                  <td class="editable" onclick="openEditModal(this)">
+                    400,000
+                  </td>
                 </tr>
-                <tr>
+                <tr data-group="keobanh">
                   <td>SP0004</td>
                   <td>Bánh AFC 200g</td>
-                  <td>150</td>
+                  <td class="stock">150</td>
                   <td>15,000</td>
                   <td>20,000</td>
-                  <td>15,000</td>
+                  <td class="editable" onclick="openEditModal(this)">15,000</td>
                 </tr>
-                <tr>
+                <tr data-group="keobanh">
                   <td>SP0005</td>
                   <td>Key có ánh sáng led 5g</td>
-                  <td>80</td>
+                  <td class="stock">80</td>
                   <td>5,000</td>
                   <td>7,000</td>
-                  <td>5,000</td>
+                  <td class="editable" onclick="openEditModal(this)">5,000</td>
                 </tr>
-                <tr>
+                <tr data-group="keobanh">
                   <td>SP0006</td>
                   <td>Key Doublemint</td>
-                  <td>200</td>
+                  <td class="stock">200</td>
                   <td>4,000</td>
                   <td>6,000</td>
-                  <td>4,000</td>
+                  <td class="editable" onclick="openEditModal(this)">4,000</td>
                 </tr>
-                <tr>
+                <tr data-group="keobanh">
                   <td>SP0007</td>
                   <td>Bánh ăn Johnson xanh</td>
-                  <td>30</td>
+                  <td class="stock">30</td>
                   <td>8,000</td>
                   <td>12,000</td>
-                  <td>8,000</td>
+                  <td class="editable" onclick="openEditModal(this)">8,000</td>
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Sửa Giá -->
+    <div
+      class="modal fade"
+      id="editPriceModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="editPriceModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editPriceModalLabel">Sửa Giá</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Đóng"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <label for="newPrice"
+              >Giá mới [<span id="currentPrice"></span>] =</label
+            >
+            <div class="input-group mb-3">
+              <input
+                type="number"
+                id="newPrice"
+                class="form-control"
+                placeholder="Nhập giá mới"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text">VND</span>
+              </div>
+            </div>
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" id="applyToAll" />
+              <label class="form-check-label" for="applyToAll"
+                >Áp dụng công thức cho 25 sản phẩm trong bảng giá?</label
+              >
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Bỏ qua
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              onclick="saveNewPrice()"
+            >
+              Đồng ý
+            </button>
           </div>
         </div>
       </div>
@@ -180,6 +275,87 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <script>
+      let currentCell;
+
+      // Function to open edit modal
+      function openEditModal(cell) {
+        currentCell = cell;
+        const currentPrice = cell.textContent.replace(/,/g, "");
+        document.getElementById("currentPrice").textContent = currentPrice;
+        document.getElementById("newPrice").value = currentPrice;
+        $("#editPriceModal").modal("show");
+      }
+
+      // Function to save new price
+      function saveNewPrice() {
+        const newPrice = document.getElementById("newPrice").value;
+        if (currentCell) {
+          currentCell.textContent = newPrice.replace(
+            /\B(?=(\d{3})+(?!\d))/g,
+            ","
+          ); // Format number with commas
+          $("#editPriceModal").modal("hide");
+        }
+      }
+
+      // Function to display selected group
+      function displaySelectedGroup(select) {
+        const selectedGroup = select.options[select.selectedIndex].text;
+        document.getElementById("selectedGroup").textContent =
+          "Nhóm hàng đã chọn: " + selectedGroup;
+      }
+
+      // Function to filter by group
+      function filterByGroup() {
+        const selectedGroup = document.getElementById("groupSelect").value;
+        const rows = document.querySelectorAll("#dataTable tbody tr");
+        rows.forEach((row) => {
+          if (
+            !selectedGroup ||
+            row.getAttribute("data-group") === selectedGroup
+          ) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+        displaySelectedGroup(document.getElementById("groupSelect"));
+        filterTable(); // To apply product search filter as well
+      }
+
+      // Function to filter stock
+      function filterStock(radio) {
+        const filterValue = radio.value;
+        const rows = document.querySelectorAll("#dataTable tbody tr");
+        rows.forEach((row) => {
+          const stock = parseInt(row.querySelector(".stock").textContent);
+          if (
+            filterValue === "tatca" ||
+            (filterValue === "duoi" && stock < 50) ||
+            (filterValue === "vuot" && stock > 100) ||
+            (filterValue === "conhang" && stock > 0)
+          ) {
+            row.style.display = "";
+          } else {
+            row.style.display = "none";
+          }
+        });
+        filterTable(); // To apply product search filter as well
+      }
+
+      // Function to filter table by product name
+      function filterTable() {
+        const searchInput = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+        const rows = document.querySelectorAll("#dataTable tbody tr");
+        rows.forEach((row) => {
+          const productName = row.cells[1].textContent.toLowerCase();
+          const isVisible = productName.includes(searchInput);
+          row.style.display = isVisible ? "" : "none";
+        });
+      }
+
       // Function to handle file import
       document
         .getElementById("fileInput")
@@ -203,9 +379,16 @@
               if (index > 0) {
                 // Skip header row
                 const newRow = document.createElement("tr");
-                row.forEach((cell) => {
+                newRow.setAttribute("data-group", row[1].toLowerCase()); // Assuming group is in the second column
+                row.forEach((cell, cellIndex) => {
                   const newCell = document.createElement("td");
                   newCell.textContent = cell;
+                  if (cellIndex === 5) {
+                    newCell.className = "editable";
+                    newCell.onclick = function () {
+                      openEditModal(this);
+                    };
+                  }
                   newRow.appendChild(newCell);
                 });
                 tbody.appendChild(newRow);

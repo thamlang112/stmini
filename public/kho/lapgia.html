@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bảng Giá Chung</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 20px;
+      }
+      .panel {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .row {
+        margin-bottom: 20px;
+      }
+      .table th,
+      .table td {
+        vertical-align: middle;
+      }
+      .btn-custom {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="panel">
+            <h5>Bảng giá</h5>
+            <input
+              type="text"
+              class="form-control mb-3"
+              placeholder="Tìm kiếm bảng giá"
+            />
+
+            <h6>Nhóm hàng</h6>
+            <select class="form-control mb-3">
+              <option>Tất cả</option>
+              <option>Thuốc lá</option>
+              <option>Sữa</option>
+              <option>Mỹ phẩm</option>
+              <option>Kẹo bánh</option>
+              <option>Đồ uống có cồn</option>
+              <option>Thực phẩm ăn liền</option>
+            </select>
+
+            <h6>Tồn kho</h6>
+            <div>
+              <label
+                ><input type="radio" name="tonkho" value="tatca" checked />Tất
+                cả</label
+              ><br />
+              <label
+                ><input type="radio" name="tonkho" value="duoi" />Dưới mức
+                tồn</label
+              ><br />
+              <label
+                ><input type="radio" name="tonkho" value="vuot" />Vượt mức
+                tồn</label
+              ><br />
+              <label
+                ><input type="radio" name="tonkho" value="conhang" />Còn hàng
+                trong kho</label
+              ><br />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="panel">
+            <div class="mb-3">
+              <input
+                type="file"
+                id="fileInput"
+                class="btn btn-info btn-custom"
+                style="display: none"
+              />
+              <button
+                class="btn btn-success btn-custom"
+                onclick="document.getElementById('fileInput').click();"
+              >
+                Import
+              </button>
+              <button
+                class="btn btn-primary btn-custom"
+                onclick="exportToExcel();"
+              >
+                Xuất file
+              </button>
+            </div>
+            <table class="table table-bordered" id="dataTable">
+              <thead class="thead-light">
+                <tr>
+                  <th>Mã hàng</th>
+                  <th>Tên hàng</th>
+                  <th>Tồn kho</th>
+                  <th>Giá vốn</th>
+                  <th>Giá nhập cuối</th>
+                  <th>Bảng giá chung</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>SP0001</td>
+                  <td>Hộp phấn phủ Reeve 100g</td>
+                  <td>100</td>
+                  <td>8,000</td>
+                  <td>14,000</td>
+                  <td>10,000</td>
+                </tr>
+                <tr>
+                  <td>SP0002</td>
+                  <td>Mỹ phẩm bột Nhật Bản</td>
+                  <td>50</td>
+                  <td>20,000</td>
+                  <td>28,000</td>
+                  <td>20,000</td>
+                </tr>
+                <tr>
+                  <td>SP0003</td>
+                  <td>Rượu Chivas Regal 12</td>
+                  <td>20</td>
+                  <td>400,000</td>
+                  <td>550,000</td>
+                  <td>400,000</td>
+                </tr>
+                <tr>
+                  <td>SP0004</td>
+                  <td>Bánh AFC 200g</td>
+                  <td>150</td>
+                  <td>15,000</td>
+                  <td>20,000</td>
+                  <td>15,000</td>
+                </tr>
+                <tr>
+                  <td>SP0005</td>
+                  <td>Key có ánh sáng led 5g</td>
+                  <td>80</td>
+                  <td>5,000</td>
+                  <td>7,000</td>
+                  <td>5,000</td>
+                </tr>
+                <tr>
+                  <td>SP0006</td>
+                  <td>Key Doublemint</td>
+                  <td>200</td>
+                  <td>4,000</td>
+                  <td>6,000</td>
+                  <td>4,000</td>
+                </tr>
+                <tr>
+                  <td>SP0007</td>
+                  <td>Bánh ăn Johnson xanh</td>
+                  <td>30</td>
+                  <td>8,000</td>
+                  <td>12,000</td>
+                  <td>8,000</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+    <script>
+      // Function to handle file import
+      document
+        .getElementById("fileInput")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+
+          reader.onload = function (e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, { type: "array" });
+            const firstSheetName = workbook.SheetNames[0];
+            const worksheet = workbook.Sheets[firstSheetName];
+            const json = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            // Clear existing rows
+            const tbody = document.querySelector("#dataTable tbody");
+            tbody.innerHTML = "";
+
+            // Insert new rows
+            json.forEach((row, index) => {
+              if (index > 0) {
+                // Skip header row
+                const newRow = document.createElement("tr");
+                row.forEach((cell) => {
+                  const newCell = document.createElement("td");
+                  newCell.textContent = cell;
+                  newRow.appendChild(newCell);
+                });
+                tbody.appendChild(newRow);
+              }
+            });
+          };
+
+          reader.readAsArrayBuffer(file);
+        });
+
+      // Function to export table data to Excel
+      function exportToExcel() {
+        const table = document.getElementById("dataTable");
+        const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        XLSX.writeFile(workbook, "bang_gia_chung.xlsx");
+      }
+    </script>
+  </body>
+</html>

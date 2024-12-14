@@ -329,16 +329,19 @@
         const rows = document.querySelectorAll("#dataTable tbody tr");
         rows.forEach((row) => {
           const stock = parseInt(row.querySelector(".stock").textContent);
-          if (
-            filterValue === "tatca" ||
-            (filterValue === "duoi" && stock < 50) ||
-            (filterValue === "vuot" && stock > 100) ||
-            (filterValue === "conhang" && stock > 0)
-          ) {
-            row.style.display = "";
-          } else {
-            row.style.display = "none";
+          let isVisible = false;
+
+          if (filterValue === "tatca") {
+            isVisible = true;
+          } else if (filterValue === "duoi" && stock < 50) {
+            isVisible = true;
+          } else if (filterValue === "vuot" && stock > 100) {
+            isVisible = true;
+          } else if (filterValue === "conhang" && stock > 0) {
+            isVisible = true;
           }
+
+          row.style.display = isVisible ? "" : "none";
         });
         filterTable(); // To apply product search filter as well
       }
@@ -352,7 +355,8 @@
         rows.forEach((row) => {
           const productName = row.cells[1].textContent.toLowerCase();
           const isVisible = productName.includes(searchInput);
-          row.style.display = isVisible ? "" : "none";
+          row.style.display =
+            row.style.display !== "none" && isVisible ? "" : "none";
         });
       }
 

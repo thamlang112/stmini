@@ -29,7 +29,10 @@
     <div class="container">
       <h1>Quản Lý Bán Hàng</h1>
       <div class="input-section">
-        <input type="text" id="tenSanPham" placeholder="Tên Sản Phẩm" />
+        <select id="tenSanPham">
+          <option value="">Chọn Sản Phẩm</option>
+          <!-- Các sản phẩm sẽ được thêm vào đây -->
+        </select>
         <input type="number" id="soLuong" placeholder="Số Lượng" />
         <input type="text" id="maSanPham" placeholder="Mã Sản Phẩm" readonly />
         <input type="text" id="donGia" placeholder="Đơn Giá" readonly />
@@ -101,6 +104,33 @@
     </div>
 
     <script>
+      const products = [
+        { maHH: "SP00026", tenHH: "Hộp phở bò phố cổ", giaBan: 10000 },
+        { maHH: "SP00027", tenHH: "Mì bò hầm chua Reeva 100g", giaBan: 15000 },
+        { maHH: "SP00028", tenHH: "Thịt bò Nhật Bản", giaBan: 250000 },
+        { maHH: "SP00029", tenHH: "Rượu Chivas Regal 12", giaBan: 10500000 },
+        // Thêm các sản phẩm khác nếu cần
+      ];
+
+      const tenSanPhamSelect = document.getElementById("tenSanPham");
+      products.forEach((product) => {
+        const option = document.createElement("option");
+        option.value = product.maHH;
+        option.textContent = product.tenHH;
+        tenSanPhamSelect.appendChild(option);
+      });
+
+      tenSanPhamSelect.addEventListener("change", function () {
+        const selectedProduct = products.find((p) => p.maHH === this.value);
+        if (selectedProduct) {
+          document.getElementById("maSanPham").value = selectedProduct.maHH;
+          document.getElementById("donGia").value =
+            selectedProduct.giaBan + " VNĐ";
+        } else {
+          document.getElementById("maSanPham").value = "";
+          document.getElementById("donGia").value = "";
+        }
+      });
       let productsData = [];
       let paymentHistory = [];
       const isAdmin = sessionStorage.getItem("role") === "manager";

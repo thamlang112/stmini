@@ -309,3 +309,14 @@ img {
   background-color: #f8f9fa; /* Màu xám nhạt cho nút Đóng */
   color: black; /* Màu chữ cho nút Đóng */
 }
+
+.product-table th:nth-child(4), /* Cột Giá bán */
+  .product-table th:nth-child(5) {
+  /* Cột Giá vốn */
+  text-align: right;
+}
+.product-table td:nth-child(4), /* Cột Giá bán */
+  .product-table td:nth-child(5) {
+  /* Cột Giá vốn */
+  text-align: right;
+}

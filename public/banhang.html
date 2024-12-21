@@ -23,6 +23,16 @@
         position: absolute;
         z-index: 9999;
       }
+      .input-section,
+      .buttons {
+        margin-bottom: 15px; /* Dãn cách giữa các ô */
+      }
+
+      .total,
+      .history {
+        margin-top: 20px;
+        margin-bottom: 20px; /* Dãn cách dưới cùng */
+      }
     </style>
   </head>
   <body>
@@ -97,6 +107,7 @@
       <div class="history">
         <h3>Lịch Sử Thanh Toán</h3>
         <ul id="paymentHistory"></ul>
+        <div id="paymentDetail"></div>
         <button id="btnClearHistory">Xóa Lịch Sử</button>
       </div>
 
@@ -131,6 +142,7 @@
           document.getElementById("donGia").value = "";
         }
       });
+
       let productsData = [];
       let paymentHistory = [];
       const isAdmin = sessionStorage.getItem("role") === "manager";
@@ -152,31 +164,40 @@
           historyItem.textContent = `Hóa Đơn ${item.invoiceNumber} - Tổng: ${item.total} VNĐ, Khách đưa: ${item.moneyGiven} VNĐ, Trả lại: ${item.changeDue} VNĐ, Ngày: ${item.date}`;
           paymentHistoryList.appendChild(historyItem);
         });
-      }
+        // productsData = JSON.parse(localStorage.getItem("products")) || [];
+        // paymentHistory =
+        //   JSON.parse(localStorage.getItem("paymentHistory")) || [];
 
-      document
-        .getElementById("tenSanPham")
-        .addEventListener("input", function () {
-          const productName = this.value.trim();
-          const product = productsData.find(
-            (p) => p.tenHH.toLowerCase() === productName.toLowerCase()
-          );
-          if (product) {
-            document.getElementById("maSanPham").value = product.maHH;
-            document.getElementById("donGia").value = product.giaBan;
-          } else {
-            document.getElementById("maSanPham").value = "";
-            document.getElementById("donGia").value = "";
-          }
-        });
+        // const lastResetTime = localStorage.getItem("lastResetTime");
+        // const currentTime = new Date().getTime();
+
+        // if (lastResetTime) {
+        //   const timeDifference = currentTime - lastResetTime;
+        //   const sevenDaysInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 7 ngày
+
+        //   if (timeDifference > sevenDaysInMilliseconds) {
+        //     localStorage.removeItem("paymentHistory");
+        //     paymentHistory = [];
+        //     localStorage.setItem("lastResetTime", currentTime); // Cập nhật thời gian reset
+        //     loadPaymentHistory(); // Cập nhật giao diện
+        //   }
+        // } else {
+        //   localStorage.setItem("lastResetTime", currentTime); // Lưu thời gian lần đầu
+        // }
+
+        // loadPaymentHistory();
+      }
 
       document
         .getElementById("themSanPham")
         .addEventListener("click", function () {
           const maSanPham = document.getElementById("maSanPham").value;
-          const tenSanPham = document.getElementById("tenSanPham").value;
+          const tenSanPham =
+            tenSanPhamSelect.options[tenSanPhamSelect.selectedIndex].text;
           const soLuong = parseInt(document.getElementById("soLuong").value);
-          const donGia = parseFloat(document.getElementById("donGia").value);
+          const donGia = parseFloat(
+            document.getElementById("donGia").value.replace(" VNĐ", "")
+          );
 
           if (maSanPham && tenSanPham && soLuong > 0 && donGia > 0) {
             const tbody = document.getElementById("productTableBody");
@@ -191,7 +212,8 @@
             tbody.appendChild(newRow);
             updateTotal();
 
-            document.getElementById("tenSanPham").value = "";
+            // Reset các ô nhập liệu
+            tenSanPhamSelect.value = "";
             document.getElementById("soLuong").value = "";
             document.getElementById("maSanPham").value = "";
             document.getElementById("donGia").value = "";
@@ -217,12 +239,19 @@
       document
         .getElementById("btnPrintInvoice")
         .addEventListener("click", function () {
+          const moneyGiven = parseFloat(
+            document.getElementById("moneyGiven").value
+          );
+          if (isNaN(moneyGiven) || moneyGiven <= 0) {
+            alert("Vui lòng nhập số tiền khách đưa.");
+            return;
+          }
+
           const productRows = document.querySelectorAll("#productTableBody tr");
           const invoiceTableBody = document.getElementById("invoiceTableBody");
           invoiceTableBody.innerHTML = "";
 
           let totalInvoice = 0;
-          const purchasedProducts = []; // Lưu thông tin sản phẩm đã mua
 
           productRows.forEach((row, index) => {
             const cells = row.querySelectorAll("td");
@@ -232,20 +261,14 @@
 
             totalInvoice += amount;
 
-            // Lưu thông tin sản phẩm đã mua
-            purchasedProducts.push({
-              maHH: cells[1].textContent,
-              quantity: quantity,
-            });
-
             const newRow = document.createElement("tr");
             newRow.innerHTML = `
-                    <td>${index + 1}</td>
-                    <td>${cells[2].textContent}</td>
-                    <td>${quantity}</td>
-                    <td>${price} VNĐ</td>
-                    <td>${amount} VNĐ</td>
-                `;
+              <td>${index + 1}</td>
+              <td>${cells[2].textContent}</td>
+              <td>${quantity}</td>
+              <td>${price} VNĐ</td>
+              <td>${amount} VNĐ</td>
+          `;
             invoiceTableBody.appendChild(newRow);
           });
 
@@ -258,8 +281,6 @@
           document.getElementById("vatAmount").textContent =
             vatAmount.toFixed(2) + " VNĐ"; // Hiển thị thuế VAT
 
-          const moneyGiven =
-            parseFloat(document.getElementById("moneyGiven").value) || 0;
           const changeDue = moneyGiven - totalInvoice;
           document.getElementById("changeDue").textContent =
             changeDue >= 0 ? changeDue + " VNĐ" : "0 VNĐ";
@@ -267,6 +288,9 @@
             changeDue < 0 ? -changeDue + " VNĐ" : "0 VNĐ";
 
           document.getElementById("invoice").style.display = "block";
+
+          // Reset các ô nhập liệu sau khi xuất hóa đơn
+          resetInputs();
 
           // Cập nhật tổng doanh thu và tổng đơn hàng
           totalRevenue += totalInvoice;
@@ -276,46 +300,65 @@
           localStorage.setItem("totalRevenue", totalRevenue);
           localStorage.setItem("totalOrders", totalOrders);
 
-          // Giảm số lượng sản phẩm trong kho
-          reduceProductQuantity(purchasedProducts);
-
-          // Lưu thông tin hóa đơn vào localStorage
-          const invoiceData = {
-            invoiceItems: [],
-            total: totalInvoice,
-            moneyGiven: moneyGiven,
-            changeDue: changeDue,
-          };
-
-          productRows.forEach((row) => {
-            const cells = row.querySelectorAll("td");
-            invoiceData.invoiceItems.push({
-              name: cells[2].textContent,
-              quantity: parseInt(cells[3].textContent),
-              price: parseFloat(cells[4].textContent.replace(" VNĐ", "")),
-            });
-          });
-
-          localStorage.setItem("currentInvoice", JSON.stringify(invoiceData));
-
-          // Lưu thông tin thanh toán
+          // Lưu thông tin thanh toán vào lịch sử
           savePaymentHistory(totalInvoice, moneyGiven, changeDue);
         });
 
-      function reduceProductQuantity(purchasedProducts) {
-        const products = JSON.parse(localStorage.getItem("products")) || [];
+      function savePaymentHistory(totalInvoice, moneyGiven, changeDue) {
+        const paymentHistory =
+          JSON.parse(localStorage.getItem("paymentHistory")) || [];
+        const paymentInfo = {
+          invoice: `Hóa Đơn ${paymentHistory.length + 1}`,
+          total: totalInvoice + " VNĐ",
+          moneyGiven: moneyGiven + " VNĐ",
+          changeDue: changeDue >= 0 ? changeDue + " VNĐ" : "0 VNĐ",
+          date: new Date().toLocaleString(),
+        };
 
-        purchasedProducts.forEach((purchased) => {
-          const product = products.find((p) => p.maHH === purchased.maHH);
-          if (product) {
-            product.soLuong -= purchased.quantity; // Giảm số lượng
-            if (product.soLuong < 0) {
-              product.soLuong = 0; // Đảm bảo số lượng không âm
-            }
-          }
+        paymentHistory.push(paymentInfo);
+        localStorage.setItem("paymentHistory", JSON.stringify(paymentHistory));
+
+        updatePaymentHistoryList(paymentHistory);
+      }
+
+      function updatePaymentHistoryList(paymentHistory) {
+        const paymentHistoryList =
+          document.getElementById("paymentHistoryList");
+        paymentHistoryList.innerHTML = ""; // Xóa danh sách hiện tại
+
+        paymentHistory.forEach((payment, index) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${payment.invoice} - Tổng: ${payment.total}, Ngày: ${payment.date}`;
+          listItem.setAttribute("data-info", JSON.stringify(payment));
+          paymentHistoryList.appendChild(listItem);
         });
 
-        localStorage.setItem("products", JSON.stringify(products)); // Cập nhật lại localStorage
+        // Thêm sự kiện click cho từng mục
+        document.querySelectorAll("#paymentHistoryList li").forEach((item) => {
+          item.addEventListener("click", function () {
+            const info = JSON.parse(this.getAttribute("data-info"));
+            const detailDiv = document.getElementById("paymentDetail");
+
+            detailDiv.innerHTML = `
+          <h3>Chi Tiết Lịch Sử Thanh Toán</h3>
+          <p><strong>Hóa Đơn:</strong> ${info.invoice}</p>
+          <p><strong>Tổng:</strong> ${info.total}</p>
+          <p><strong>Khách Đưa:</strong> ${info.moneyGiven}</p>
+          <p><strong>Trả Lại:</strong> ${info.changeDue}</p>
+          <p><strong>Ngày:</strong> ${info.date}</p>
+      `;
+          });
+        });
+      }
+
+      function resetInputs() {
+        document.getElementById("tenSanPham").selectedIndex = 0;
+        document.getElementById("soLuong").value = "";
+        document.getElementById("maSanPham").value = "";
+        document.getElementById("donGia").value = "";
+        document.getElementById("total").value = "0 VNĐ";
+        document.getElementById("moneyGiven").value = "";
+        document.getElementById("productTableBody").innerHTML = ""; // Xóa bảng sản phẩm
       }
 
       function savePaymentHistory(total, moneyGiven, changeDue) {
@@ -339,11 +382,42 @@
           if (isAdmin) {
             localStorage.removeItem("paymentHistory");
             paymentHistory = [];
+            localStorage.setItem("lastResetTime", new Date().getTime()); // Cập nhật thời gian reset
             loadPaymentHistory();
           } else {
             alert("Bạn không có quyền xóa lịch sử thanh toán.");
           }
         });
+
+      function updatePaymentHistoryList(paymentHistory) {
+        const paymentHistoryList =
+          document.getElementById("paymentHistoryList");
+        paymentHistoryList.innerHTML = ""; // Xóa danh sách hiện tại
+
+        paymentHistory.forEach((payment, index) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${payment.invoice} - Tổng: ${payment.total}, Ngày: ${payment.date}`;
+          listItem.setAttribute("data-info", JSON.stringify(payment));
+          paymentHistoryList.appendChild(listItem);
+        });
+
+        // Thêm sự kiện click cho từng mục
+        document.querySelectorAll("#paymentHistoryList li").forEach((item) => {
+          item.addEventListener("click", function () {
+            const info = JSON.parse(this.getAttribute("data-info"));
+            const detailDiv = document.getElementById("paymentDetail");
+
+            detailDiv.innerHTML = `
+          <h3>Chi Tiết Lịch Sử Thanh Toán</h3>
+          <p><strong>Hóa Đơn:</strong> ${info.invoice}</p>
+          <p><strong>Tổng:</strong> ${info.total}</p>
+          <p><strong>Khách Đưa:</strong> ${info.moneyGiven}</p>
+          <p><strong>Trả Lại:</strong> ${info.changeDue}</p>
+          <p><strong>Ngày:</strong> ${info.date}</p>
+      `;
+          });
+        });
+      }
 
       window.onload = loadProductsFromStorage;
     </script>

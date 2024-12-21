@@ -8,88 +8,59 @@ body {
   font-family: Arial, sans-serif;
   background-color: #f0f0f0;
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 
 .container {
-  display: flex;
-  width: 100%;
-}
-
-.sidebar {
-  width: 200px;
-  background-color: #007bff;
-  color: white;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-
-.sidebar h1 {
-  margin-bottom: 20px;
-}
-
-.sidebar button {
-  margin-bottom: 10px;
-  padding: 10px;
-  background-color: transparent;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.sidebar button:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-
-.main-content {
-  flex-grow: 1;
-  padding: 20px;
   background-color: white;
-  border-left: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 100%;
+  max-width: 1200px; /* Adjusted width */
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #007bff;
+  font-size: 50px; /* Adjusted font size */
 }
 
 .input-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   margin-bottom: 20px;
 }
 
+.input-section label {
+  flex-basis: 100%;
+  font-weight: bold;
+}
+
 .input-section input {
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  flex: 1 1 calc(33% - 20px); /* Responsive */
+  flex: 1 1 calc(50% - 10px);
+  min-width: 200px;
 }
 
 .input-section button {
-  padding: 10px 20px;
+  padding: 12px 20px;
   background-color: #28a745;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
+  flex-basis: 100%;
+  font-size: 16px; /* Increased button font size */
 }
 
 .input-section button:hover {
   background-color: #218838;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: center;
-}
-
-th {
-  background-color: #007bff;
-  color: white;
 }

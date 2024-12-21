@@ -134,8 +134,8 @@ function showProductInfo(
           <div><strong>Mã hàng:</strong> ${code}</div>
           <div><strong>Mã vạch:</strong> ${barcode}</div>
           <div><strong>Thương hiệu:</strong> ${brand}</div>
-          <div><strong>Giá bán:</strong> ${price}</div>
-          <div><strong>Giá vốn:</strong> ${cost}</div>
+          <div><strong>Giá bán (VNĐ):</strong> ${price}</div>
+          <div><strong>Giá vốn (VNĐ):</strong> ${cost}</div>
           <div><strong>Trọng lượng:</strong> ${weight}</div>
           <div><strong>Vị trí:</strong> ${location}</div>
           <div><strong>Mô tả:</strong> ${description}</div>

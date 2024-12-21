@@ -10,10 +10,9 @@
     <div class="container">
       <h1>Quản Lý Hàng Hóa</h1>
       <div class="input-section">
-        <label for="hinhAnh">Tải lên Hình Ảnh (URL hoặc File):</label>
+        <label for="hinhFile">Tải lên Hình Ảnh (URL hoặc File):</label>
         <input type="file" id="hinhFile" accept="image/*" />
         <input type="text" id="hinhAnh" placeholder="URL Hình Ảnh" />
-
         <input type="text" id="maHH" placeholder="Mã Hàng Hóa" />
         <input type="text" id="xuatxu" placeholder="Xuất Xứ" />
         <input type="text" id="dvt" placeholder="Đơn Vị Tính" />
@@ -36,11 +35,10 @@
         const hinhFileInput = document.getElementById("hinhFile").files[0];
         let hinhAnh = hinhAnhInput;
 
-        // Nếu người dùng đã chọn file, chuyển đổi nó thành URL
         if (hinhFileInput) {
           const reader = new FileReader();
           reader.onloadend = function () {
-            hinhAnh = reader.result; // Lấy URL hình ảnh từ FileReader
+            hinhAnh = reader.result;
             addProduct(hinhAnh);
           };
           reader.readAsDataURL(hinhFileInput);
@@ -65,16 +63,13 @@
 
         if (maHH && tenHH && soLuong > 0) {
           const products = JSON.parse(localStorage.getItem("products")) || [];
-
-          // Kiểm tra nếu sản phẩm đã tồn tại
           const existingProduct = products.find(
             (product) => product.maHH === maHH
           );
+
           if (existingProduct) {
-            // Cộng thêm số lượng nếu sản phẩm đã tồn tại
             existingProduct.soLuong += soLuong;
           } else {
-            // Thêm sản phẩm mới
             products.push({
               maHH,
               xuatxu,
@@ -93,7 +88,7 @@
           }
 
           localStorage.setItem("products", JSON.stringify(products));
-          alert("Sản phẩm đã được thêm thành công!"); // Thông báo người dùng
+          alert("Sản phẩm đã được thêm thành công!");
         } else {
           alert("Vui lòng nhập đầy đủ thông tin sản phẩm!");
         }
